@@ -24,7 +24,7 @@
 
         <div>
           <div class="muted" style="font-size:12px; margin-bottom:8px;">内容</div>
-          <textarea class="textarea" v-model.trim="message" @blur="precheck" />
+          <textarea class="textarea" v-model.trim="message" @blur="precheck"></textarea>
           <div v-if="errors.message" class="err">{{ errors.message }}</div>
           <div v-else-if="hint" :class="hintClass">{{ hint }}</div>
         </div>
