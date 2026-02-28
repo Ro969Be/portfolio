@@ -45,7 +45,16 @@ import { works } from "../data/works";
 </script>
 
 <style scoped>
-/* 既存デザインを壊さない“薄い”スタイル（色味変更OKの範囲） */
+html,
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.page {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
 .works-page {
   min-height: 100svh;
   background: var(--page-bg);
