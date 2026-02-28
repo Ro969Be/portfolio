@@ -126,7 +126,7 @@
               アプリケーション開発まで
             </h1>
 
-            <!-- ★ ここが「1か所」：背景画像をJSで差し替える -->
+            <!-- ★ ここはCSSの ::before が --illus-url を表示する設計 -->
             <div class="hero-illus" aria-hidden="true">
               <div class="hero-illus__box" id="heroIllus">
                 <div class="hero-illus__label">IMAGE</div>
@@ -215,7 +215,6 @@ const coverThumbs = reactive<Record<string, string | null>>({
 });
 
 function initCoverThumbs() {
-  // 外部はOGP（/api/og が画像 bytes を返す設計）
   coverThumbs.githubLegacy = ogpImage("https://github.com/Mori-Chan");
   coverThumbs.githubCurrent = ogpImage("https://github.com/Ro969Be");
   coverThumbs.qiita = ogpImage("https://qiita.com/Mori-chan");
@@ -223,6 +222,7 @@ function initCoverThumbs() {
 
 /* ===============================
    Hero image swap (ONE PLACE)
+   ✅ ここが本命：--illus-url を差し替える
 ================================ */
 function setIllus(variant: string) {
   const map: Record<string, string> = {
@@ -235,14 +235,13 @@ function setIllus(variant: string) {
   };
 
   const url = map[String(variant)] || map["00"];
-  const el = document.getElementById("heroIllus") as HTMLElement | null;
-  if (!el) return;
 
-  el.style.backgroundImage = `url("${url}")`;
-  el.style.backgroundRepeat = "no-repeat";
-  el.style.backgroundPosition = "center";
-  el.style.backgroundSize = "cover";
-  el.classList.add("is-img");
+  // CSS側: .hero-illus__box::before { background-image: var(--illus-url) }
+  document.documentElement.style.setProperty("--illus-url", `url("${url}")`);
+
+  // ラベル非表示（あなたのCSS: .hero-illus__box.is-img .hero-illus__label { opacity:0 }）
+  const el = document.getElementById("heroIllus");
+  if (el) el.classList.add("is-img");
 }
 
 /* ===============================
@@ -275,16 +274,19 @@ function setupHeroMenuHoverOnce() {
 
 /* ===============================
    Cover open/close
+   ✅ グローバルCSSは body.page-open をトリガにしているので必須
 ================================ */
 function openPageFromCover() {
   const cover = coverEl.value;
-  if (!cover) {
-    showIntroCover.value = false;
-    return;
+  if (cover) {
+    cover.style.transition = "opacity .6s cubic-bezier(.22,.61,.36,1)";
+    cover.style.opacity = "0";
+    cover.style.pointerEvents = "none"; // 透明の上物がクリックを奪う事故を防ぐ
   }
 
-  cover.style.transition = "opacity .6s cubic-bezier(.22,.61,.36,1)";
-  cover.style.opacity = "0";
+  document.body.classList.add("page-open");
+  document.body.classList.add("is-ready");
+  document.body.classList.remove("is-loading");
 
   window.setTimeout(() => {
     showIntroCover.value = false;
@@ -308,12 +310,22 @@ function isReloadNav(): boolean {
 async function showCover() {
   coverKey.value += 1;
   showIntroCover.value = true;
+
+  // coverが出る時は page 側を閉じる（CSSが body.page-open 前提）
+  document.body.classList.remove("page-open");
+
   await nextTick();
+
   const cover = coverEl.value;
   if (cover) {
     cover.style.transition = "";
     cover.style.opacity = "1";
+    cover.style.pointerEvents = "";
   }
+
+  // カバー表示中でも reveal を出すなら ready をON（あなたのCSS: body.is-ready .reveal）
+  document.body.classList.add("is-ready");
+  document.body.classList.remove("is-loading");
 }
 
 /* ===============================
@@ -321,6 +333,9 @@ async function showCover() {
 ================================ */
 onBeforeRouteLeave(() => {
   showIntroCover.value = false;
+  document.body.classList.add("page-open");
+  document.body.classList.add("is-ready");
+  document.body.classList.remove("is-loading");
 });
 
 /* ===============================
@@ -330,7 +345,9 @@ onMounted(async () => {
   initCoverThumbs();
   setupHeroMenuHoverOnce();
 
-  // cover show logic (keep your existing behavior)
+  // 初期デフォルト画像
+  setIllus("00");
+
   const nowLoadId = String((performance as any).timeOrigin ?? Date.now());
   const prevLoadId = sessionStorage.getItem(LOAD_ID_KEY);
 
@@ -350,6 +367,9 @@ onMounted(async () => {
     await showCover();
   } else {
     showIntroCover.value = false;
+    document.body.classList.add("page-open");
+    document.body.classList.add("is-ready");
+    document.body.classList.remove("is-loading");
   }
 });
 
@@ -368,12 +388,7 @@ onBeforeUnmount(() => {
   opacity: 0;
 }
 
-/* hero left image box */
-.hero-illus__box {
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-}
+/* label hide when image is active */
 .hero-illus__box.is-img .hero-illus__label {
   opacity: 0;
 }
