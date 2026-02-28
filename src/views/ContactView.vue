@@ -10,9 +10,8 @@
         <div class="panel-head">
           <div class="panel-title">
             <h1>お問い合わせ</h1>
-            <p>入力→判定→送信→完了まで、同一画面内の“状態遷移”でスムーズに見せます。</p>
+            <p class="sub-title">CONTACT</p>
           </div>
-          <div class="kbd">Contact</div>
         </div>
 
         <div class="panel-body">

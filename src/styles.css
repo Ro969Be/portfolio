@@ -290,15 +290,6 @@ body.is-loading {
     font-size: 18px;
 }
 
-.kbd {
-    width: auto;
-    height: auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 999px;
-}
-
 .fb-card__desc {
     margin: 0;
     font-size: 12.5px;
@@ -661,6 +652,10 @@ body.nav-open .site-burger {
     border-bottom: 1px solid rgba(44, 44, 44, 0.06);
 }
 
+.panel-title {
+    margin: 0 auto;
+}
+
 .panel-title h1 {
     margin: 0;
     font-size: 26px;
@@ -669,11 +664,11 @@ body.nav-open .site-burger {
     color: rgba(44, 44, 44, 0.86);
 }
 
-.panel-title p {
+.panel-title .sub-title {
     margin: 8px 0 0;
-    font-size: 13px;
+    font-size: 20px;
     line-height: 1.8;
-    color: var(--text-mute);
+    text-align: center;
 }
 
 .kbd {
