@@ -46,6 +46,7 @@
 import { onMounted, onBeforeUnmount, reactive } from "vue";
 import { works } from "../data/works";
 import AppHeader from "../components/AppHeader.vue";
+import { ogpImage } from "../utils/og";
 
 function ensurePageVisible() {
   document.body.classList.add("page-open");
@@ -124,27 +125,17 @@ function bindPageScrollUX() {
 
 const thumbs = reactive<Record<string, string | null>>({});
 
-async function fetchOg(url: string): Promise<string | null> {
-  try {
-    const res = await fetch(`/api/og?url=${encodeURIComponent(url)}`, { cache: "no-store" });
-    if (!res.ok) return null;
-    const data = (await res.json()) as { image?: string | null };
-    return data?.image || null;
-  } catch {
-    return null;
-  }
-}
-
 let unbindUX: null | (() => void) = null;
 
-onMounted(async () => {
+onMounted(() => {
   ensurePageVisible();
   enableWorksScroll();
 
   unbindUX = bindPageScrollUX();
 
+  // ✅ OGP画像URLをそのままセット（/api/og が画像を返す）
   for (const w of works) {
-    thumbs[w.id] = await fetchOg(w.url);
+    thumbs[w.id] = ogpImage(w.url);
   }
 });
 
