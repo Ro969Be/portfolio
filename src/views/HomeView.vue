@@ -14,13 +14,6 @@
           <span class="cover-brand__mark" aria-hidden="true">◎</span>
           <span class="cover-brand__text">Morii's Portfolio</span>
         </RouterLink>
-
-        <nav class="cover-nav" aria-label="Global navigation">
-          <RouterLink class="cover-nav__link" to="/works">実績</RouterLink>
-          <RouterLink class="cover-nav__link" to="/contact">お問い合わせ</RouterLink>
-          <span class="cover-nav__sep">|</span>
-          <a class="cover-nav__link" href="https://github.com/Ro969Be" target="_blank" rel="noopener">GitHub</a>
-        </nav>
       </div>
     </header>
 
