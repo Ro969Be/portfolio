@@ -19,14 +19,6 @@ export const works: WorkItem[] = [
     tags: ["LP", "フロント実装", "導線改善"],
   },
   {
-    id: "tokyo-orc",
-    title: "東京お茶の水ロータリークラブ",
-    client: "Tokyo ORC",
-    summary: "クラブサイトの見せ方を整備。情報のまとまり・読みやすさ・更新性を意識して調整。",
-    url: "https://tokyo-orc.jp/",
-    tags: ["Webサイト", "UI調整", "情報整理"],
-  },
-  {
     id: "tokyo-orc-member",
     title: "東京お茶の水ロータリークラブ 会員サイト",
     client: "Tokyo ORC",
@@ -59,5 +51,12 @@ export const works: WorkItem[] = [
     tags: ["Archive"],
     isLegacy: true,
     notes: ["現在は参照専用です。"],
+  },
+  {
+    id: "qiita",
+    title: "Qiita",
+    summary: "Discord Botの音声関係の記事をアップ。",
+    url: "https://qiita.com/Mori-chan",
+    tags: ["Qiita"],
   },
 ];
