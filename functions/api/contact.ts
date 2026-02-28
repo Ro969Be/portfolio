@@ -20,7 +20,7 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     }
     // FROM は Resend で許可されている送信元が必要
     // 未設定なら Resend の開発用 from を使う（※後で必ず自分のドメインに変える）
-    const from = env.CONTACT_FROM || "Portfolio <onboarding@resend.dev>";
+    const from = env.RESEND_FROM || "Portfolio <onboarding@resend.dev>";
 
     // --- body ---
     const body = await safeJson(request);
@@ -124,5 +124,5 @@ function tryParse(s: string) {
 type Env = {
   RESEND_API_KEY?: string;
   RESEND_TO?: string;   // 自分の受信アドレス
-  CONTACT_FROM?: string; // Resendで許可されたfrom（最初は onboarding@resend.dev でOK）
+  RESEND_FROM?: string; // Resendで許可されたfrom（最初は onboarding@resend.dev でOK）
 };
