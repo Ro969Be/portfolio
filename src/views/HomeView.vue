@@ -1,11 +1,4 @@
 <template>
-  <!-- Intro Overlay (reload motion) -->
-  <div v-if="showIntroCover" ref="introEl" class="intro" aria-hidden="true">
-    <div class="intro__inner">
-      <div class="intro__line">今日は何をお手伝いしましょうか？</div>
-    </div>
-  </div>
-
   <!-- ===== Fullscreen Cover ===== -->
   <div v-if="showIntroCover" :key="coverKey" ref="coverEl" class="cover" aria-label="fullscreen cover">
     <header class="cover-header">
@@ -51,9 +44,7 @@
             class="fb-card__illust"
             aria-hidden="true"
             :class="{ 'is-img': !!coverThumbs.githubLegacy }"
-            :style="
-              coverThumbs.githubLegacy ? { backgroundImage: `url('${coverThumbs.githubLegacy}')` } : undefined
-            "
+            :style="coverThumbs.githubLegacy ? { backgroundImage: `url('${coverThumbs.githubLegacy}')` } : undefined"
           >
             <div class="fb-card__illust-inner">LINK</div>
           </div>
@@ -70,9 +61,7 @@
             class="fb-card__illust"
             aria-hidden="true"
             :class="{ 'is-img': !!coverThumbs.githubCurrent }"
-            :style="
-              coverThumbs.githubCurrent ? { backgroundImage: `url('${coverThumbs.githubCurrent}')` } : undefined
-            "
+            :style="coverThumbs.githubCurrent ? { backgroundImage: `url('${coverThumbs.githubCurrent}')` } : undefined"
           >
             <div class="fb-card__illust-inner">LINK</div>
           </div>
@@ -137,6 +126,7 @@
               アプリケーション開発まで
             </h1>
 
+            <!-- ★ ここが「1か所」：背景画像をJSで差し替える -->
             <div class="hero-illus" aria-hidden="true">
               <div class="hero-illus__box" id="heroIllus">
                 <div class="hero-illus__label">IMAGE</div>
@@ -205,102 +195,49 @@ import { ogpImage } from "../utils/og";
 
 const showIntroCover = ref(false);
 const coverKey = ref(0);
-
 const coverEl = ref<HTMLElement | null>(null);
-const introEl = ref<HTMLElement | null>(null);
 
 const SEEN_KEY = "MP_HOME_SEEN";
 const RELOAD_KEY = "MP_HOME_RELOAD_ONCE";
 const LOAD_ID_KEY = "MP_LOAD_ID";
 
 let pageBound = false;
-let detachScrollEffects: null | (() => void) = null;
 
 /* ===============================
    Cover thumbs
-   - works/contact: local
-   - github/qiita: ogp via /api/og
 ================================ */
 const coverThumbs = reactive<Record<string, string | null>>({
-  works: null,
+  works: "/images/works.png",
+  contact: "/images/contact.png",
   githubLegacy: null,
   githubCurrent: null,
   qiita: null,
-  contact: null,
 });
 
 function initCoverThumbs() {
-  // internal pages are safer with local images (OGP can be missing)
-  coverThumbs.works = "/images/home/tile-works.jpg";
-  coverThumbs.contact = "/images/home/tile-contact.jpg";
-
-  // external links use OGP fetcher endpoint (returns image bytes)
+  // 外部はOGP（/api/og が画像 bytes を返す設計）
   coverThumbs.githubLegacy = ogpImage("https://github.com/Mori-Chan");
   coverThumbs.githubCurrent = ogpImage("https://github.com/Ro969Be");
   coverThumbs.qiita = ogpImage("https://qiita.com/Mori-chan");
 }
 
-function isReloadNav(): boolean {
-  try {
-    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
-    if (nav?.type) return nav.type === "reload";
-    const p: any = performance as any;
-    if (p?.navigation) return p.navigation.type === 1;
-  } catch {}
-  return false;
-}
-
-function runIntroThenReveal() {
-  document.body.classList.remove("is-ready");
-  document.body.classList.add("is-loading");
-
-  const intro = introEl.value;
-
-  const FORCE_MS = 3000;
-  const forceTimer = window.setTimeout(() => {
-    if (intro) intro.classList.add("is-out");
-    document.body.classList.remove("is-loading");
-    document.body.classList.add("is-ready");
-  }, FORCE_MS);
-
-  if (!intro) {
-    window.clearTimeout(forceTimer);
-    document.body.classList.remove("is-loading");
-    document.body.classList.add("is-ready");
-    return;
-  }
-
-  const LINE_MS = 1250;
-  const OUT_MS = 550;
-
-  window.setTimeout(() => {
-    intro.classList.add("is-out");
-    window.setTimeout(() => {
-      window.clearTimeout(forceTimer);
-      document.body.classList.remove("is-loading");
-      document.body.classList.add("is-ready");
-    }, OUT_MS);
-  }, LINE_MS);
-}
-
 /* ===============================
-   illus swap (hero left)
-   Uses local images under /public/images/home/
+   Hero image swap (ONE PLACE)
 ================================ */
 function setIllus(variant: string) {
   const map: Record<string, string> = {
-    "00": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.35'/%3E%3Cpath d='M120 520 L1080 520' stroke='%23a24d44' stroke-opacity='.18' stroke-width='12'/%3E%3C/svg%3E",
-    "01": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Ccircle cx='380' cy='320' r='220' fill='%23a24d44' fill-opacity='.14'/%3E%3Ccircle cx='780' cy='420' r='260' fill='%23a24d44' fill-opacity='.10'/%3E%3C/svg%3E",
-    "02": ogpImage("https://github.com/Mori-Chan"),
-    "03": ogpImage("https://github.com/Ro969Be"),
+    "00": "/images/home.png",
+    "01": "/images/works.png",
+    "02": "https://github.com/Mori-Chan.png?size=1200",
+    "03": "https://github.com/Ro969Be.png?size=1200",
     "04": ogpImage("https://qiita.com/Mori-chan"),
-    "05": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Cpath d='M120 560 L1080 560' stroke='%23a24d44' stroke-opacity='.22' stroke-width='14'/%3E%3Cpath d='M220 470 L980 470' stroke='%23a24d44' stroke-opacity='.18' stroke-width='10'/%3E%3Cpath d='M340 390 L860 390' stroke='%23a24d44' stroke-opacity='.14' stroke-width='8'/%3E%3C/svg%3E",
+    "05": "/images/contact.png",
   };
 
-  const key = String(variant);
-  const url = map[key] ? map[key] : map["00"];
+  const url = map[String(variant)] || map["00"];
   const el = document.getElementById("heroIllus") as HTMLElement | null;
   if (!el) return;
+
   el.style.backgroundImage = `url("${url}")`;
   el.style.backgroundRepeat = "no-repeat";
   el.style.backgroundPosition = "center";
@@ -308,7 +245,10 @@ function setIllus(variant: string) {
   el.classList.add("is-img");
 }
 
-function setupPageInteractionsOnce() {
+/* ===============================
+   Bind hover/focus/touch
+================================ */
+function setupHeroMenuHoverOnce() {
   if (pageBound) return;
   pageBound = true;
 
@@ -334,64 +274,14 @@ function setupPageInteractionsOnce() {
 }
 
 /* ===============================
-   Scroll effects (header alpha + parallax)
-================================ */
-function getScroller(): Window | HTMLElement {
-  const page = document.querySelector(".page") as HTMLElement | null;
-  if (page) {
-    const st = getComputedStyle(page);
-    if (st.overflowY === "auto" || st.overflowY === "scroll") return page;
-  }
-  return window;
-}
-
-function attachScrollEffects() {
-  const scroller = getScroller();
-  const readY = () => (scroller === window ? window.scrollY : (scroller as HTMLElement).scrollTop);
-
-  let raf = 0;
-  const onScroll = () => {
-    if (raf) return;
-    raf = window.requestAnimationFrame(() => {
-      raf = 0;
-      const y = readY();
-
-      if (y > 8) document.body.classList.add("is-scrolled");
-      else document.body.classList.remove("is-scrolled");
-
-      const p = Math.min(y * 0.08, 24);
-      document.documentElement.style.setProperty("--hero-parallax", `${p}px`);
-    });
-  };
-
-  onScroll();
-
-  if (scroller === window) {
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll as any);
-  } else {
-    (scroller as HTMLElement).addEventListener("scroll", onScroll, { passive: true });
-    return () => (scroller as HTMLElement).removeEventListener("scroll", onScroll as any);
-  }
-}
-
-/* ===============================
    Cover open/close
 ================================ */
-function startPageEffects() {
-  setupPageInteractionsOnce();
-
-  detachScrollEffects?.();
-  detachScrollEffects = attachScrollEffects();
-}
-
 function openPageFromCover() {
   const cover = coverEl.value;
-  if (!cover) return;
-
-  document.body.classList.add("page-open");
-  document.body.classList.remove("is-loading");
-  document.body.classList.add("is-ready");
+  if (!cover) {
+    showIntroCover.value = false;
+    return;
+  }
 
   cover.style.transition = "opacity .6s cubic-bezier(.22,.61,.36,1)";
   cover.style.opacity = "0";
@@ -399,46 +289,37 @@ function openPageFromCover() {
   window.setTimeout(() => {
     showIntroCover.value = false;
     window.scrollTo({ top: 0, left: 0, behavior: "instant" as any });
-    startPageEffects();
   }, 600);
 }
 
-async function showCoverAndIntro() {
+/* ===============================
+   Reload detect
+================================ */
+function isReloadNav(): boolean {
+  try {
+    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    if (nav?.type) return nav.type === "reload";
+    const p: any = performance as any;
+    if (p?.navigation) return p.navigation.type === 1;
+  } catch {}
+  return false;
+}
+
+async function showCover() {
   coverKey.value += 1;
   showIntroCover.value = true;
-
-  document.body.classList.remove("page-open");
-
   await nextTick();
-
   const cover = coverEl.value;
   if (cover) {
     cover.style.transition = "";
     cover.style.opacity = "1";
   }
-
-  const intro = introEl.value;
-  if (intro) intro.classList.remove("is-out");
-
-  runIntroThenReveal();
-}
-
-function showPageImmediately() {
-  showIntroCover.value = false;
-  document.body.classList.add("page-open");
-  document.body.classList.remove("is-loading");
-  document.body.classList.add("is-ready");
-
-  startPageEffects();
 }
 
 /* ===============================
    Route leave
 ================================ */
 onBeforeRouteLeave(() => {
-  document.body.classList.add("page-open");
-  document.body.classList.remove("is-loading");
-  document.body.classList.add("is-ready");
   showIntroCover.value = false;
 });
 
@@ -446,14 +327,10 @@ onBeforeRouteLeave(() => {
    Mount
 ================================ */
 onMounted(async () => {
-  // 初期の保険（白画面系を潰す）
-  document.body.classList.remove("nav-open");
-  document.body.classList.remove("is-loading");
-  document.body.classList.remove("is-scrolled");
-
-  // cover tile images
   initCoverThumbs();
+  setupHeroMenuHoverOnce();
 
+  // cover show logic (keep your existing behavior)
   const nowLoadId = String((performance as any).timeOrigin ?? Date.now());
   const prevLoadId = sessionStorage.getItem(LOAD_ID_KEY);
 
@@ -464,32 +341,24 @@ onMounted(async () => {
 
   const seen = sessionStorage.getItem(SEEN_KEY) === "1";
   const reloadPending = sessionStorage.getItem(RELOAD_KEY) === "1";
-
   const shouldShow = reloadPending || !seen;
 
   sessionStorage.setItem(SEEN_KEY, "1");
   sessionStorage.setItem(RELOAD_KEY, "0");
 
   if (shouldShow) {
-    await showCoverAndIntro();
-    return;
+    await showCover();
+  } else {
+    showIntroCover.value = false;
   }
-
-  showPageImmediately();
 });
 
 onBeforeUnmount(() => {
   pageBound = false;
-  detachScrollEffects?.();
-  detachScrollEffects = null;
-
-  document.body.classList.remove("is-scrolled");
-  document.documentElement.style.setProperty("--hero-parallax", "0px");
 });
 </script>
 
 <style scoped>
-/* Cover/Works-like tiles: image background support */
 .fb-card__illust.is-img {
   background-repeat: no-repeat;
   background-position: center;
@@ -497,6 +366,13 @@ onBeforeUnmount(() => {
 }
 .fb-card__illust.is-img .fb-card__illust-inner {
   opacity: 0;
+}
+
+/* hero left image box */
+.hero-illus__box {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 .hero-illus__box.is-img .hero-illus__label {
   opacity: 0;
