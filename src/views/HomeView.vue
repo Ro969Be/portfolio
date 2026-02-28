@@ -498,4 +498,7 @@ onBeforeUnmount(() => {
 .fb-card__illust.is-img .fb-card__illust-inner {
   opacity: 0;
 }
+.hero-illus__box.is-img .hero-illus__label {
+  opacity: 0;
+}
 </style>
