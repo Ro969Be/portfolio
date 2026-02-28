@@ -34,17 +34,23 @@ async function sha256Hex(input: string) {
 }
 
 function pickOgImage(html: string): string | null {
-  // og:image
+  // ① og:image
   const m1 = html.match(
     /<meta\s+[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["'][^>]*>/i
   );
   if (m1?.[1]) return m1[1];
 
-  // twitter:image (保険)
+  // ② twitter:image
   const m2 = html.match(
     /<meta\s+[^>]*name=["']twitter:image["'][^>]*content=["']([^"']+)["'][^>]*>/i
   );
   if (m2?.[1]) return m2[1];
+
+  // ⭐③ fallback：本文最初のimgタグ
+  const m3 = html.match(
+    /<img[^>]+src=["']([^"']+)["'][^>]*>/i
+  );
+  if (m3?.[1]) return m3[1];
 
   return null;
 }
