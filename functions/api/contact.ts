@@ -1,17 +1,30 @@
+// functions/api/contact.ts
+
 export const onRequestPost: PagesFunction = async ({ request }) => {
   try {
-    const body = await request.json().catch(() => ({}));
+    const body = await request.json();
 
-    // 疎通確認：受け取れたらOK
-    return new Response(JSON.stringify({ ok: true }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    console.log("CONTACT:", body);
+
+    return new Response(
+      JSON.stringify({
+        ok: true,
+      }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   } catch (e: any) {
-    return new Response(JSON.stringify({ ok: false, error: e?.message || "unknown" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({
+        ok: false,
+        error: e.message,
+      }),
+      { status: 500 }
+    );
   }
 };
 
