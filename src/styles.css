@@ -398,7 +398,7 @@ body.is-scrolled .site-header {
 
 .site-nav {
     justify-self: center;
-    display: flex;
+    display: none;
     gap: 22px;
     align-items: center;
     font-size: 13px;
@@ -849,6 +849,10 @@ body.nav-open .site-burger {
 
     .page {
         overflow: hidden;
+    }
+
+    .site-nav {
+        display: flex;
     }
 }
 

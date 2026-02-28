@@ -195,6 +195,7 @@ onMounted(() => {
   border-top: 1px solid var(--border-weak);
   margin-top: 8px;
 }
+
 .site-drawer__link.is-sub {
   padding-left: 16px;
   font-size: 13px;

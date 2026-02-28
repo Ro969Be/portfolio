@@ -132,7 +132,7 @@ body.is-scrolled .site-header {
 }
 
 .site-nav {
-    display: flex;
+    display: none;
     align-items: center;
     gap: 24px;
 }
