@@ -30,7 +30,12 @@
       <section class="cover-cards" aria-label="cover cards">
         <RouterLink class="fb-card reveal" data-delay="1" to="/works">
           <div class="fb-card__num">01</div>
-          <div class="fb-card__illust" aria-hidden="true">
+          <div
+            class="fb-card__illust"
+            aria-hidden="true"
+            :class="{ 'is-img': !!coverThumbs.works }"
+            :style="coverThumbs.works ? { backgroundImage: `url('${coverThumbs.works}')` } : undefined"
+          >
             <div class="fb-card__illust-inner">WORKS</div>
           </div>
           <div class="fb-card__head">
@@ -42,7 +47,14 @@
 
         <a class="fb-card reveal" data-delay="2" href="https://github.com/Mori-Chan" target="_blank" rel="noopener">
           <div class="fb-card__num">02</div>
-          <div class="fb-card__illust" aria-hidden="true">
+          <div
+            class="fb-card__illust"
+            aria-hidden="true"
+            :class="{ 'is-img': !!coverThumbs.githubLegacy }"
+            :style="
+              coverThumbs.githubLegacy ? { backgroundImage: `url('${coverThumbs.githubLegacy}')` } : undefined
+            "
+          >
             <div class="fb-card__illust-inner">LINK</div>
           </div>
           <div class="fb-card__head">
@@ -54,7 +66,14 @@
 
         <a class="fb-card reveal" data-delay="3" href="https://github.com/Ro969Be" target="_blank" rel="noopener">
           <div class="fb-card__num">03</div>
-          <div class="fb-card__illust" aria-hidden="true">
+          <div
+            class="fb-card__illust"
+            aria-hidden="true"
+            :class="{ 'is-img': !!coverThumbs.githubCurrent }"
+            :style="
+              coverThumbs.githubCurrent ? { backgroundImage: `url('${coverThumbs.githubCurrent}')` } : undefined
+            "
+          >
             <div class="fb-card__illust-inner">LINK</div>
           </div>
           <div class="fb-card__head">
@@ -66,7 +85,12 @@
 
         <a class="fb-card reveal" data-delay="4" href="https://qiita.com/Mori-chan" target="_blank" rel="noopener">
           <div class="fb-card__num">04</div>
-          <div class="fb-card__illust" aria-hidden="true">
+          <div
+            class="fb-card__illust"
+            aria-hidden="true"
+            :class="{ 'is-img': !!coverThumbs.qiita }"
+            :style="coverThumbs.qiita ? { backgroundImage: `url('${coverThumbs.qiita}')` } : undefined"
+          >
             <div class="fb-card__illust-inner">LINK</div>
           </div>
           <div class="fb-card__head">
@@ -78,7 +102,12 @@
 
         <RouterLink class="fb-card reveal" data-delay="5" to="/contact">
           <div class="fb-card__num">05</div>
-          <div class="fb-card__illust" aria-hidden="true">
+          <div
+            class="fb-card__illust"
+            aria-hidden="true"
+            :class="{ 'is-img': !!coverThumbs.contact }"
+            :style="coverThumbs.contact ? { backgroundImage: `url('${coverThumbs.contact}')` } : undefined"
+          >
             <div class="fb-card__illust-inner">CONTACT</div>
           </div>
           <div class="fb-card__head">
@@ -110,7 +139,7 @@
 
             <div class="hero-illus" aria-hidden="true">
               <div class="hero-illus__box" id="heroIllus">
-                <div class="hero-illus__label">IMAGE (dummy)</div>
+                <div class="hero-illus__label">IMAGE</div>
               </div>
             </div>
           </div>
@@ -144,7 +173,7 @@
               <div class="hero-menu__arrow" aria-hidden="true">›</div>
             </a>
 
-            <a class="hero-menu__item" data-illus="03" href="https://qiita.com/Mori-chan" target="_blank" rel="noopener">
+            <a class="hero-menu__item" data-illus="03" href="https://github.com/Ro969Be" target="_blank" rel="noopener">
               <div class="hero-menu__num">03</div>
               <div class="hero-menu__label">GitHub / 個人開発(現行)</div>
               <div class="hero-menu__arrow" aria-hidden="true">›</div>
@@ -169,9 +198,10 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, onBeforeUnmount, ref } from "vue";
+import { nextTick, onMounted, onBeforeUnmount, ref, reactive } from "vue";
 import { onBeforeRouteLeave } from "vue-router";
 import AppHeader from "../components/AppHeader.vue";
+import { ogpImage } from "../utils/og";
 
 const showIntroCover = ref(false);
 const coverKey = ref(0);
@@ -185,6 +215,30 @@ const LOAD_ID_KEY = "MP_LOAD_ID";
 
 let pageBound = false;
 let detachScrollEffects: null | (() => void) = null;
+
+/* ===============================
+   Cover thumbs
+   - works/contact: local
+   - github/qiita: ogp via /api/og
+================================ */
+const coverThumbs = reactive<Record<string, string | null>>({
+  works: null,
+  githubLegacy: null,
+  githubCurrent: null,
+  qiita: null,
+  contact: null,
+});
+
+function initCoverThumbs() {
+  // internal pages are safer with local images (OGP can be missing)
+  coverThumbs.works = "/images/home/tile-works.jpg";
+  coverThumbs.contact = "/images/home/tile-contact.jpg";
+
+  // external links use OGP fetcher endpoint (returns image bytes)
+  coverThumbs.githubLegacy = ogpImage("https://github.com/Mori-Chan");
+  coverThumbs.githubCurrent = ogpImage("https://github.com/Ro969Be");
+  coverThumbs.qiita = ogpImage("https://qiita.com/Mori-chan");
+}
 
 function isReloadNav(): boolean {
   try {
@@ -230,27 +284,22 @@ function runIntroThenReveal() {
 }
 
 /* ===============================
-   illus swap
+   illus swap (hero left)
+   Uses local images under /public/images/home/
 ================================ */
 function setIllus(variant: string) {
   const map: Record<string, string> = {
-    "00":
-      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.35'/%3E%3Cpath d='M120 520 L1080 520' stroke='%23a24d44' stroke-opacity='.18' stroke-width='12'/%3E%3C/svg%3E",
-    "01":
-      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Cpath d='M0 520 C 220 430, 360 610, 620 520 C 880 430, 980 590, 1200 520' fill='none' stroke='%23a24d44' stroke-opacity='.35' stroke-width='18'/%3E%3C/svg%3E",
-    "02":
-      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Ccircle cx='380' cy='320' r='220' fill='%23a24d44' fill-opacity='.14'/%3E%3Ccircle cx='780' cy='420' r='260' fill='%23a24d44' fill-opacity='.10'/%3E%3C/svg%3E",
-    "03":
-      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Cpath d='M120 560 L1080 560' stroke='%23a24d44' stroke-opacity='.22' stroke-width='14'/%3E%3Cpath d='M220 470 L980 470' stroke='%23a24d44' stroke-opacity='.18' stroke-width='10'/%3E%3Cpath d='M340 390 L860 390' stroke='%23a24d44' stroke-opacity='.14' stroke-width='8'/%3E%3C/svg%3E",
-    "04":
-      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Cpath d='M180 520 C 340 360, 520 640, 720 420 C 900 240, 1040 520, 1200 360' fill='none' stroke='%23a24d44' stroke-opacity='.28' stroke-width='16'/%3E%3C/svg%3E",
-    "05":
-      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Crect x='240' y='200' width='720' height='320' rx='40' fill='%23a24d44' fill-opacity='.10'/%3E%3Cpath d='M300 260 L900 260' stroke='%23a24d44' stroke-opacity='.18' stroke-width='12'/%3E%3C/svg%3E",
+    "00": "/images/home/illus-01-works.jpg",
+    "01": "/images/home/illus-01-works.jpg",
+    "02": "/images/home/illus-02-github-legacy.jpg",
+    "03": "/images/home/illus-03-github-current.jpg",
+    "04": "/images/home/illus-04-qiita.jpg",
+    "05": "/images/home/illus-05-contact.jpg",
   };
 
   const key = String(variant);
-  const uri = map[key] ? map[key] : map["00"];
-  document.documentElement.style.setProperty("--illus-url", `url("${uri}")`);
+  const url = map[key] ? map[key] : map["00"];
+  document.documentElement.style.setProperty("--illus-url", `url("${url}")`);
 }
 
 function setupPageInteractionsOnce() {
@@ -396,6 +445,9 @@ onMounted(async () => {
   document.body.classList.remove("is-loading");
   document.body.classList.remove("is-scrolled");
 
+  // cover tile images
+  initCoverThumbs();
+
   const nowLoadId = String((performance as any).timeOrigin ?? Date.now());
   const prevLoadId = sessionStorage.getItem(LOAD_ID_KEY);
 
@@ -429,3 +481,15 @@ onBeforeUnmount(() => {
   document.documentElement.style.setProperty("--hero-parallax", "0px");
 });
 </script>
+
+<style scoped>
+/* Cover/Works-like tiles: image background support */
+.fb-card__illust.is-img {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.fb-card__illust.is-img .fb-card__illust-inner {
+  opacity: 0;
+}
+</style>
