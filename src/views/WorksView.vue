@@ -1,97 +1,147 @@
 <template>
-  <div class="panel">
-    <div class="panel-head">
-      <div class="panel-title">
-        <h1>今日はどの実績を見ますか？</h1>
-        <p>ページ全体は固定。右パネルだけが滑らかに切り替わります。</p>
-      </div>
-      <div class="kbd">Works</div>
-    </div>
+  <div class="works-page">
+    <div class="works-inner">
+      <header class="works-head">
+        <h1 class="works-title">実績</h1>
+        <p class="works-sub">公開可能な範囲で掲載しています。</p>
+      </header>
 
-    <div class="panel-body">
-      <WorkPicker
-        :works="works"
-        :activeId="activeId"
-        :activeRouteName="String(route.name || '')"
-        @pick="pick"
-      />
-
-      <div class="hr" style="margin:14px 0;"></div>
-
-      <div class="card" style="background: rgba(0,0,0,.15);">
-        <div class="card-inner" style="display:grid; gap:10px;">
-          <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start;">
-            <div>
-              <div class="muted" style="font-size:12px;">{{ active.id }} / {{ active.subtitle }}</div>
-              <div style="font-size:18px; font-weight:700; margin-top:6px;">{{ active.title }}</div>
-              <div class="muted" style="font-size:13px; margin-top:6px;">Role: {{ active.role }}</div>
-            </div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
-              <a
-                v-for="l in active.links"
-                :key="l.href"
-                class="btn"
-                :href="l.href"
-                target="_blank"
-                rel="noreferrer"
-                style="height:36px;"
-              >
-                {{ l.label }}
-              </a>
-            </div>
+      <section class="works-list" aria-label="works list">
+        <article
+          v-for="w in works"
+          :key="w.id"
+          class="work-card"
+          :id="w.id"
+        >
+          <div class="work-top">
+            <div class="work-title">{{ w.title }}</div>
+            <a class="work-link" :href="w.url" target="_blank" rel="noopener">
+              表示する ›
+            </a>
           </div>
 
-          <div class="hr"></div>
+          <div v-if="w.client" class="work-client">{{ w.client }}</div>
+          <p class="work-summary">{{ w.summary }}</p>
 
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-            <div class="card" style="background: rgba(255,255,255,.03);">
-              <div class="card-inner">
-                <div class="muted" style="font-size:12px;">Scope</div>
-                <ul style="margin:10px 0 0; padding-left:18px; color:var(--muted); line-height:1.7;">
-                  <li v-for="s in active.scope" :key="s">{{ s }}</li>
-                </ul>
-              </div>
-            </div>
+          <ul class="work-tags" aria-label="tags">
+            <li v-for="t in w.tags" :key="t" class="work-tag">{{ t }}</li>
+          </ul>
 
-            <div class="card" style="background: rgba(255,255,255,.03);">
-              <div class="card-inner">
-                <div class="muted" style="font-size:12px;">Outcome</div>
-                <ul style="margin:10px 0 0; padding-left:18px; color:var(--muted); line-height:1.7;">
-                  <li v-for="o in active.outcome" :key="o">{{ o }}</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <ul v-if="w.notes?.length" class="work-notes" aria-label="notes">
+            <li v-for="n in w.notes" :key="n">{{ n }}</li>
+          </ul>
+        </article>
+      </section>
 
-          <div class="muted" style="font-size:12px; line-height:1.7;">
-            ※ 実績詳細は“短く・切り替え中心”にして、スクロール無しでも気持ちよく見られる作りにしています。
-          </div>
-        </div>
+      <div class="works-cta">
+        <RouterLink class="works-cta__btn" to="/contact">お問い合わせへ</RouterLink>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useRoute } from "vue-router";
-import WorkPicker from "../components/WorkPicker.vue";
-import { works, type Work } from "../data/works";
-
-const route = useRoute();
-const activeId = ref<Work["id"]>("01");
-
-const active = computed(() => works.find(w => w.id === activeId.value) ?? works[0]);
-
-function pick(id: Work["id"]) {
-  activeId.value = id;
-}
+import { works } from "../data/works";
 </script>
 
 <style scoped>
-@media (max-width: 980px){
-  .panel-body > .card .card-inner > div[style*="grid-template-columns"]{
-    grid-template-columns: 1fr !important;
-  }
+/* 既存デザインを壊さない“薄い”スタイル（色味変更OKの範囲） */
+.works-page {
+  min-height: 100svh;
+  background: var(--page-bg);
+  color: rgba(0, 0, 0, 0.78);
+  padding: 26px 0 64px;
+}
+.works-inner {
+  width: min(1060px, calc(100% - 64px));
+  margin: 0 auto;
+}
+.works-head {
+  margin-bottom: 18px;
+}
+.works-title {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+.works-sub {
+  margin: 6px 0 0;
+  opacity: 0.72;
+}
+.works-list {
+  display: grid;
+  gap: 14px;
+}
+.work-card {
+  background: rgba(255, 255, 255, 0.32);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 18px;
+  padding: 16px 16px 14px;
+}
+.work-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+.work-title {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.work-link {
+  font-size: 13px;
+  opacity: 0.78;
+}
+.work-link:hover {
+  opacity: 1;
+}
+.work-client {
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.65;
+}
+.work-summary {
+  margin: 10px 0 10px;
+  font-size: 13.5px;
+  line-height: 1.9;
+  opacity: 0.82;
+}
+.work-tags {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.work-tag {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+.work-notes {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  line-height: 1.8;
+  opacity: 0.75;
+}
+.works-cta {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+}
+.works-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
 </style>

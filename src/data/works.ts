@@ -1,51 +1,67 @@
-export type Work = {
-  id: "01" | "02" | "03" | "04";
+export type WorkItem = {
+  id: string;
   title: string;
-  subtitle: string;
-  role: string;
-  scope: string[];
-  outcome: string[];
-  links: { label: string; href: string }[];
+  client?: string;
+  summary: string;
+  url: string;
+  tags: string[];
+  notes?: string[];
 };
 
-export const works: Work[] = [
+export const works: WorkItem[] = [
   {
-    id: "01",
-    title: "兼六パークタウン 清瀬第63期",
-    subtitle: "物件ページ / LP",
-    role: "Frontend（既存ページ改修）",
-    scope: ["レイアウト崩れ修正", "レスポンシブ調整", "表示/導線の微調整"],
-    outcome: ["スマホでの視認性を安定化", "更新しやすい状態へ整理"],
-    links: [{ label: "Live", href: "https://www.kenroku-web.com/parktown/kiyose63/" }]
+    id: "parktown-kiyose63",
+    title: "ParkTown 清瀬63 物件サイト",
+    client: "Kenroku Web",
+    summary:
+      "既存デザインを活かしつつ、導線／情報設計の調整と表示品質の最適化。LPとしての見やすさと回遊性を重視。",
+    url: "https://www.kenroku-web.com/parktown/kiyose63/",
+    tags: ["LP", "フロント実装", "導線改善"],
   },
   {
-    id: "02",
+    id: "tokyo-orc",
     title: "東京お茶の水ロータリークラブ",
-    subtitle: "会員サイトのデザイン修正",
-    role: "UI Improvement / Maintenance",
-    scope: ["既存UIの整え", "文言/余白/整列の調整", "運用更新に伴う改修"],
-    outcome: ["見やすさ・統一感の改善", "運用変更でも崩れにくく調整"],
-    links: [{ label: "Live", href: "https://tokyo-orc.jp/" }]
+    client: "Tokyo ORC",
+    summary:
+      "クラブサイトの見せ方を整備。情報のまとまり・読みやすさ・更新性を意識して調整。",
+    url: "https://tokyo-orc.jp/",
+    tags: ["Webサイト", "UI調整", "情報整理"],
   },
   {
-    id: "03",
-    title: "桧家住宅：Z空調ページ",
-    subtitle: "ブランドページ運用・更新対応",
-    role: "Frontend（更新・差し替え対応）",
-    scope: ["コンテンツ差し替え", "デザイン整合性の維持", "軽微なUI調整"],
-    outcome: ["更新時の見た目崩れを抑制", "ブランドトーンを維持"],
-    links: [{ label: "Live", href: "https://www.hinokiya.jp/tecnology/z/" }]
+    id: "tokyo-orc-member",
+    title: "東京お茶の水ロータリークラブ 会員サイト（デザイン修正）",
+    client: "Tokyo ORC",
+    summary:
+      "会員向けページのデザイン修正。既存トーンを崩さず、読みやすさと操作性を改善。",
+    url: "https://tokyo-orc.jp/",
+    tags: ["会員サイト", "デザイン修正", "UI/UX"],
+    notes: ["会員領域は非公開のため、公開URLはクラブサイトを記載。"],
   },
   {
-    id: "04",
-    title: "GitHub",
-    subtitle: "実装・アウトプット",
-    role: "Code / Projects",
-    scope: ["個人開発", "実装検証", "継続的な改善"],
-    outcome: ["再現性のある実装を公開", "スキルの可視化"],
-    links: [
-      { label: "Mori-Chan", href: "https://github.com/Mori-Chan" },
-      { label: "Ro969Be", href: "https://github.com/Ro969Be" }
-    ]
-  }
+    id: "hinokiya-z",
+    title: "檜家住宅 TECHNOLOGY Z（特設ページ）",
+    client: "Hinokiya",
+    summary:
+      "特設ページの表現・演出の調整。現在は起用タレント等の差し替えが行われている前提。",
+    url: "https://www.hinokiya.jp/tecnology/z/",
+    tags: ["特設", "演出", "フロント調整"],
+    notes: ["過去は斎藤工さん起用だったが現在は内容が更新されている想定。"],
+  },
+  {
+    id: "github-current",
+    title: "GitHub（現行アカウント）",
+    summary:
+      "現在利用中のGitHub。個人開発・検証・ポートフォリオ用のリポジトリを管理。",
+    url: "https://github.com/Ro969Be",
+    tags: ["GitHub", "個人開発"],
+  },
+  {
+    id: "github-legacy",
+    title: "GitHub（旧アカウント・参照用）",
+    summary:
+      "過去に利用していたGitHub。登録メールアドレスが使用不可になり、現在ログイン不可。",
+    url: "https://github.com/Mori-Chan",
+    tags: ["GitHub", "旧アカウント"],
+    notes: ["ログイン不可のため更新停止。参照のみ。"],
+  },
 ];
