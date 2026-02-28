@@ -11,11 +11,11 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
         error: "RESEND_API_KEY is missing",
       });
     }
-    if (!env.CONTACT_TO) {
+    if (!env.RESEND_TO) {
       return json(500, {
         ok: false,
         where: "env",
-        error: "CONTACT_TO is missing (your mail address)",
+        error: "RESEND_TO is missing (your mail address)",
       });
     }
     // FROM は Resend で許可されている送信元が必要
@@ -51,7 +51,7 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
       },
       body: JSON.stringify({
         from,
-        to: [env.CONTACT_TO],
+        to: [env.RESEND_TO],
         subject,
         text,
         reply_to: email, // 返信先を問い合わせ元に
@@ -123,6 +123,6 @@ function tryParse(s: string) {
 
 type Env = {
   RESEND_API_KEY?: string;
-  CONTACT_TO?: string;   // 自分の受信アドレス
+  RESEND_TO?: string;   // 自分の受信アドレス
   CONTACT_FROM?: string; // Resendで許可されたfrom（最初は onboarding@resend.dev でOK）
 };
