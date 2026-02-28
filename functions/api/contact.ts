@@ -27,9 +27,42 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     const name = (body?.name ?? "").toString().trim();
     const email = (body?.email ?? "").toString().trim();
     const message = (body?.message ?? "").toString().trim();
+    const turnstileToken = (body?.turnstileToken ?? "").toString().trim();
 
-    if (!name || !email || !message) {
+    if (!name || !email || !message || !turnstileToken) {
       return json(400, { ok: false, where: "input", error: "Missing fields" });
+    }
+
+    // --- Turnstile verify ---
+    if (!env.TURNSTILE_SECRET_KEY) {
+      return json(500, {
+        ok: false,
+        where: "env",
+        error: "TURNSTILE_SECRET_KEY is missing",
+      });
+    }
+
+    const verifyRes = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          secret: env.TURNSTILE_SECRET_KEY,
+          response: turnstileToken,
+        }),
+      }
+    );
+
+    const verifyJson = await verifyRes.json<any>();
+
+    if (!verifyJson?.success) {
+      return json(400, {
+        ok: false,
+        where: "turnstile",
+        error: "Turnstile verification failed",
+        detail: verifyJson,
+      });
     }
 
     // --- Resend send ---
@@ -123,6 +156,7 @@ function tryParse(s: string) {
 
 type Env = {
   RESEND_API_KEY?: string;
-  RESEND_TO?: string;   // 自分の受信アドレス
-  RESEND_FROM?: string; // Resendで許可されたfrom（最初は onboarding@resend.dev でOK）
+  RESEND_TO?: string;
+  RESEND_FROM?: string;
+  TURNSTILE_SECRET_KEY?: string;
 };
