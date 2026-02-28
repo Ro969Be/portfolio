@@ -289,17 +289,23 @@ function runIntroThenReveal() {
 ================================ */
 function setIllus(variant: string) {
   const map: Record<string, string> = {
-    "00": "/images/home/illus-01-works.jpg",
-    "01": "/images/home/illus-01-works.jpg",
-    "02": "/images/home/illus-02-github-legacy.jpg",
-    "03": "/images/home/illus-03-github-current.jpg",
-    "04": "/images/home/illus-04-qiita.jpg",
-    "05": "/images/home/illus-05-contact.jpg",
+    "00": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.35'/%3E%3Cpath d='M120 520 L1080 520' stroke='%23a24d44' stroke-opacity='.18' stroke-width='12'/%3E%3C/svg%3E",
+    "01": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Ccircle cx='380' cy='320' r='220' fill='%23a24d44' fill-opacity='.14'/%3E%3Ccircle cx='780' cy='420' r='260' fill='%23a24d44' fill-opacity='.10'/%3E%3C/svg%3E",
+    "02": ogpImage("https://github.com/Mori-Chan"),
+    "03": ogpImage("https://github.com/Ro969Be"),
+    "04": ogpImage("https://qiita.com/Mori-chan"),
+    "05": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Cpath d='M120 560 L1080 560' stroke='%23a24d44' stroke-opacity='.22' stroke-width='14'/%3E%3Cpath d='M220 470 L980 470' stroke='%23a24d44' stroke-opacity='.18' stroke-width='10'/%3E%3Cpath d='M340 390 L860 390' stroke='%23a24d44' stroke-opacity='.14' stroke-width='8'/%3E%3C/svg%3E",
   };
 
   const key = String(variant);
   const url = map[key] ? map[key] : map["00"];
-  document.documentElement.style.setProperty("--illus-url", `url("${url}")`);
+  const el = document.getElementById("heroIllus") as HTMLElement | null;
+  if (!el) return;
+  el.style.backgroundImage = `url("${url}")`;
+  el.style.backgroundRepeat = "no-repeat";
+  el.style.backgroundPosition = "center";
+  el.style.backgroundSize = "cover";
+  el.classList.add("is-img");
 }
 
 function setupPageInteractionsOnce() {
