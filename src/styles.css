@@ -47,7 +47,7 @@ button {
     --page-stroke: rgba(0, 0, 0, 0.06);
     --page-text: rgba(0, 0, 0, 0.72);
 
-    --illus-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Cpath d='M0 520 C 220 430, 360 610, 620 520 C 880 430, 980 590, 1200 520' fill='none' stroke='%23a24d44' stroke-opacity='.35' stroke-width='18'/%3E%3C/svg%3E");
+    --illus-url: url("data: image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700' %3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.35' /%3E%3Cpath d='M120 520 L1080 520' stroke='%23a24d44' stroke-opacity='.18' stroke-width='12' /%3E%3C/svg%3E");
 }
 
 /* =========================================
@@ -240,7 +240,7 @@ body.is-loading {
 .cover-cards {
     width: min(1240px, calc(100% - 88px));
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 28px;
 }
 
@@ -561,6 +561,7 @@ body.nav-open .site-burger {
     letter-spacing: 0.05em;
     font-weight: 500;
     color: rgba(0, 0, 0, 0.78);
+    text-align: center;
 }
 
 .hero-illus__box {
@@ -675,6 +676,63 @@ body.nav-open .site-burger {
 
     .hero-card__inner {
         grid-template-columns: 50% 50%;
+    }
+}
+
+@media (max-width: 1012px) {
+    .cover-cards {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .cover-header__inner {
+        width: calc(100% - 24px);
+    }
+
+    .cover-nav {
+        display: none;
+    }
+
+    .cover-main {
+        padding: 84px 0 64px;
+    }
+
+    .fb-card {
+        border-radius: 14px;
+        padding: 16px 16px 14px;
+
+        display: grid;
+        grid-template-columns: 42px 1fr 34px;
+        grid-template-rows: auto auto;
+        column-gap: 14px;
+        row-gap: 8px;
+        align-items: center;
+    }
+
+    .fb-card__num {
+        margin: 0;
+        grid-column: 1;
+        grid-row: 1 / 3;
+        align-self: start;
+    }
+
+    .fb-card__illust {
+        display: none;
+        /* 画像無し（要件） */
+    }
+
+    .fb-card__head {
+        grid-column: 2 / 4;
+        grid-row: 1;
+        margin: 0;
+    }
+
+    .fb-card__desc {
+        grid-column: 2 / 4;
+        grid-row: 2;
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.7;
     }
 }
 

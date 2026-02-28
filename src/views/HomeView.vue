@@ -1,85 +1,128 @@
 <template>
   <!-- Intro Overlay (reload motion) -->
-  <div class="intro" aria-hidden="true">
+  <div v-if="showIntroCover" ref="introEl" class="intro" aria-hidden="true">
     <div class="intro__inner">
       <div class="intro__line">今日は何をお手伝いしましょうか？</div>
     </div>
   </div>
 
   <!-- ===== Fullscreen Cover ===== -->
-  <div class="cover" aria-label="fullscreen cover">
+  <!-- ✅ keyで毎回作り直して opacity 残骸を完全排除 -->
+  <div
+    v-if="showIntroCover"
+    :key="coverKey"
+    ref="coverEl"
+    class="cover"
+    aria-label="fullscreen cover"
+  >
     <header class="cover-header">
       <div class="cover-header__inner">
         <!-- ロゴはダミー -->
-        <RouterLink class="cover-brand" to="/" aria-label="Mori Portfolio">
+        <RouterLink class="cover-brand" to="/" aria-label="Morii's Portfolio">
           <span class="cover-brand__mark" aria-hidden="true">◎</span>
-          <span class="cover-brand__text">Mori Portfolio</span>
+          <span class="cover-brand__text">Morii's Portfolio</span>
         </RouterLink>
 
         <nav class="cover-nav" aria-label="Global navigation">
           <RouterLink class="cover-nav__link" to="/works">実績</RouterLink>
           <RouterLink class="cover-nav__link" to="/contact">お問い合わせ</RouterLink>
           <span class="cover-nav__sep">|</span>
-          <a class="cover-nav__link" href="https://github.com/Ro969Be" target="_blank" rel="noopener">GitHub</a>
+          <a
+            class="cover-nav__link"
+            href="https://github.com/Ro969Be"
+            target="_blank"
+            rel="noopener"
+          >GitHub</a>
         </nav>
       </div>
     </header>
 
     <main class="cover-main">
-      <h1 class="cover-title reveal" data-delay="1">今日は何をお手伝いしましょうか？</h1>
+      <h1 class="cover-title reveal" data-delay="1">何をお求めですか？</h1>
 
       <section class="cover-cards" aria-label="cover cards">
-        <RouterLink class="fb-card reveal" data-delay="1" to="/works#parktown-kiyose63">
+        <RouterLink class="fb-card reveal" data-delay="1" to="/works">
           <div class="fb-card__num">01</div>
           <div class="fb-card__illust" aria-hidden="true">
-            <div class="fb-card__illust-inner">WORK</div>
+            <div class="fb-card__illust-inner">WORKS</div>
           </div>
           <div class="fb-card__head">
-            <div class="fb-card__label">物件サイト / LP</div>
+            <div class="fb-card__label">実績一覧</div>
             <span class="fb-card__arrow" aria-hidden="true">›</span>
           </div>
-          <p class="fb-card__desc">不動産・物件サイトの情報設計と表示品質を整えます。</p>
+          <p class="fb-card__desc">過去に携わった案件を公開可能な範囲で掲載しています。</p>
         </RouterLink>
 
-        <RouterLink class="fb-card reveal" data-delay="2" to="/works#tokyo-orc-member">
+        <a
+          class="fb-card reveal"
+          data-delay="2"
+          href="https://github.com/Mori-Chan"
+          target="_blank"
+          rel="noopener"
+        >
           <div class="fb-card__num">02</div>
           <div class="fb-card__illust" aria-hidden="true">
-            <div class="fb-card__illust-inner">WORK</div>
+            <div class="fb-card__illust-inner">LINK</div>
           </div>
           <div class="fb-card__head">
-            <div class="fb-card__label">会員サイト改修</div>
+            <div class="fb-card__label">GitHub / 個人開発(過去)</div>
             <span class="fb-card__arrow" aria-hidden="true">›</span>
           </div>
-          <p class="fb-card__desc">既存トーンを崩さず、読みやすさと操作性を改善します。</p>
-        </RouterLink>
+          <p class="fb-card__desc">過去使用していたアカウントのリポジトリはこちら。(現在はログイン不可)</p>
+        </a>
 
-        <RouterLink class="fb-card reveal" data-delay="3" to="/works#hinokiya-z">
+        <a
+          class="fb-card reveal"
+          data-delay="3"
+          href="https://github.com/Ro969Be"
+          target="_blank"
+          rel="noopener"
+        >
           <div class="fb-card__num">03</div>
           <div class="fb-card__illust" aria-hidden="true">
-            <div class="fb-card__illust-inner">WORK</div>
+            <div class="fb-card__illust-inner">LINK</div>
           </div>
           <div class="fb-card__head">
-            <div class="fb-card__label">特設ページ / 演出</div>
+            <div class="fb-card__label">GitHub / 個人開発(現行)</div>
             <span class="fb-card__arrow" aria-hidden="true">›</span>
           </div>
-          <p class="fb-card__desc">表現・演出の質を高め、印象に残るページに整えます。</p>
-        </RouterLink>
+          <p class="fb-card__desc">現行アカウントのリポジトリはこちら。</p>
+        </a>
 
-        <a class="fb-card reveal" data-delay="4" href="https://github.com/Ro969Be" target="_blank" rel="noopener">
+        <a
+          class="fb-card reveal"
+          data-delay="4"
+          href="https://qiita.com/Mori-chan"
+          target="_blank"
+          rel="noopener"
+        >
           <div class="fb-card__num">04</div>
           <div class="fb-card__illust" aria-hidden="true">
             <div class="fb-card__illust-inner">LINK</div>
           </div>
           <div class="fb-card__head">
-            <div class="fb-card__label">GitHub / 個人開発</div>
+            <div class="fb-card__label">Qiita</div>
             <span class="fb-card__arrow" aria-hidden="true">›</span>
           </div>
-          <p class="fb-card__desc">現行アカウントのリポジトリはこちら。</p>
+          <p class="fb-card__desc">Qiitaの記事はこちら。</p>
         </a>
+
+        <RouterLink class="fb-card reveal" data-delay="5" to="/contact">
+          <div class="fb-card__num">05</div>
+          <div class="fb-card__illust" aria-hidden="true">
+            <div class="fb-card__illust-inner">CONTACT</div>
+          </div>
+          <div class="fb-card__head">
+            <div class="fb-card__label">問い合わせ</div>
+            <span class="fb-card__arrow" aria-hidden="true">›</span>
+          </div>
+          <p class="fb-card__desc">問い合わせページはこちら。</p>
+        </RouterLink>
       </section>
 
       <!-- Close (bottom-left) -->
-      <button class="cover-close" type="button" aria-label="Close">
+      <!-- ✅ document click で拾わず、確実にこのボタンで閉じる -->
+      <button class="cover-close" type="button" aria-label="Close" @click="openPageFromCover">
         <span class="cover-close__x" aria-hidden="true">×</span>
       </button>
     </main>
@@ -89,7 +132,6 @@
   <div class="page" aria-label="after close page">
     <header class="site-header" role="banner">
       <div class="site-header__inner">
-        <!-- ロゴはダミー -->
         <RouterLink class="site-brand" to="/" aria-label="Mori Portfolio">
           <span class="site-brand__mark" aria-hidden="true">◎</span>
           <span class="site-brand__text">Mori Portfolio</span>
@@ -102,34 +144,36 @@
           <a class="site-nav__link" href="https://github.com/Ro969Be" target="_blank" rel="noopener">GitHub</a>
         </nav>
 
-        <!-- mobile/tablet burger -->
-        <button class="site-burger" type="button" aria-label="Menu" aria-expanded="false">
+        <button
+          ref="burgerEl"
+          class="site-burger"
+          type="button"
+          aria-label="Menu"
+          :aria-expanded="isNavOpen ? 'true' : 'false'"
+          @click.prevent.stop="toggleNav"
+        >
           <span class="site-burger__lines" aria-hidden="true"></span>
         </button>
       </div>
 
-      <!-- mobile/tablet drawer -->
-      <div class="site-drawer" aria-hidden="true">
+      <div ref="drawerEl" class="site-drawer" :aria-hidden="isNavOpen ? 'false' : 'true'">
         <RouterLink class="site-drawer__link" to="/works">実績</RouterLink>
         <RouterLink class="site-drawer__link" to="/contact">お問い合わせ</RouterLink>
         <a class="site-drawer__link" href="https://github.com/Ro969Be" target="_blank" rel="noopener">GitHub</a>
       </div>
     </header>
 
-    <!-- Nav backdrop (tap outside to close) -->
-    <div class="nav-backdrop" aria-hidden="true"></div>
+    <div class="nav-backdrop" aria-hidden="true" @click.prevent="closeNav"></div>
 
     <main class="site-main" role="main">
       <section class="hero-card" aria-label="hero card">
         <div class="hero-card__inner">
-          <!-- left -->
           <div class="hero-left">
             <h1 class="hero-title">
-              Web制作・改修を<br />
-              “見た目のまま”仕上げます。
+              Web制作・改修から<br />
+              アプリケーション開発まで
             </h1>
 
-            <!-- 画像はダミー -->
             <div class="hero-illus" aria-hidden="true">
               <div class="hero-illus__box" id="heroIllus">
                 <div class="hero-illus__label">IMAGE (dummy)</div>
@@ -137,37 +181,48 @@
             </div>
           </div>
 
-          <!-- center -->
           <div class="hero-center">
             <p class="hero-lead">
-              LP / コーポレート / 会員サイトなど、既存デザインを崩さずに修正・改善できます。<br />
-              “色味変更はOK、レイアウトと動きはそのまま” のような案件に強いです。
+              LP / コーポレートサイト / 会員サイトなどをデザインからコーディングまでできます。<br />
+              修正・改善もお任せください。
             </p>
 
             <p class="hero-body">
-              実績例：物件サイト、クラブサイト、会員サイトのデザイン修正、住宅系特設ページなど。<br /><br />
-              要望と制約を整理し、必要な箇所だけを最小限で直して、完成度を上げます。<br /><br />
+              実績例：物件サイト、クラブサイト、LPのデザイン修正、住宅系特設ページなど。<br />
+              企業内連絡ツール(チャットアプリ)、ホームページ管理アプリ、Discordの音声BOTなど。<br /><br />
+              開発環境：Node.js, npm, pnpm, MongoDB, Codex, GitHub, AngularJS, Vue.js, TypeScript, Adobe Illustrator, Adobe Photoshop<br />e.t.c.<br /><br />
               まずはご相談ください。
             </p>
           </div>
 
-          <!-- right -->
           <aside class="hero-menu" aria-label="hero menu">
-            <RouterLink class="hero-menu__item" to="/works#parktown-kiyose63" data-illus="01">
+            <RouterLink class="hero-menu__item" to="/works" data-illus="01">
               <div class="hero-menu__num">01</div>
-              <div class="hero-menu__label">物件サイト / LP 実績</div>
+              <div class="hero-menu__label">WORKS / 実績一覧</div>
               <div class="hero-menu__arrow" aria-hidden="true">›</div>
             </RouterLink>
 
-            <RouterLink class="hero-menu__item" to="/works#tokyo-orc-member" data-illus="02">
+            <a class="hero-menu__item" data-illus="02" href="https://github.com/Mori-Chan" target="_blank" rel="noopener">
               <div class="hero-menu__num">02</div>
-              <div class="hero-menu__label">会員サイトのデザイン修正</div>
+              <div class="hero-menu__label">GitHub / 個人開発(過去)</div>
               <div class="hero-menu__arrow" aria-hidden="true">›</div>
-            </RouterLink>
+            </a>
 
-            <RouterLink class="hero-menu__item" to="/contact" data-illus="03">
+            <a class="hero-menu__item" data-illus="03" href="https://qiita.com/Mori-chan" target="_blank" rel="noopener">
               <div class="hero-menu__num">03</div>
-              <div class="hero-menu__label">お問い合わせ</div>
+              <div class="hero-menu__label">GitHub / 個人開発(現行)</div>
+              <div class="hero-menu__arrow" aria-hidden="true">›</div>
+            </a>
+
+            <a class="hero-menu__item" data-illus="04" href="https://qiita.com/Mori-chan" target="_blank" rel="noopener">
+              <div class="hero-menu__num">04</div>
+              <div class="hero-menu__label">Qiita / 記事</div>
+              <div class="hero-menu__arrow" aria-hidden="true">›</div>
+            </a>
+
+            <RouterLink class="hero-menu__item" to="/contact" data-illus="05">
+              <div class="hero-menu__num">05</div>
+              <div class="hero-menu__label">CONTACT / 問い合わせ</div>
               <div class="hero-menu__arrow" aria-hidden="true">›</div>
             </RouterLink>
           </aside>
@@ -178,13 +233,46 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { nextTick, onMounted, onBeforeUnmount, ref } from "vue";
+import { onBeforeRouteLeave } from "vue-router";
+
+const showIntroCover = ref(false);
+const coverKey = ref(0);
+
+const coverEl = ref<HTMLElement | null>(null);
+const introEl = ref<HTMLElement | null>(null);
+
+const isNavOpen = ref(false);
+
+let HOME_SEEN_IN_THIS_TAB = false;
+
+function isReloadNav(): boolean {
+  try {
+    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    if (nav?.type) return nav.type === "reload";
+    const p: any = performance as any;
+    if (p?.navigation) return p.navigation.type === 1;
+  } catch {}
+  return false;
+}
 
 function runIntroThenReveal() {
-  const intro = document.querySelector(".intro") as HTMLElement | null;
+  // ✅ is-ready を外して reveal を確実に「最初から」動かす
+  document.body.classList.remove("is-ready");
   document.body.classList.add("is-loading");
 
+  const intro = introEl.value;
+
+  // ✅ failsafe（固着防止）
+  const FORCE_MS = 3000;
+  const forceTimer = window.setTimeout(() => {
+    if (intro) intro.classList.add("is-out");
+    document.body.classList.remove("is-loading");
+    document.body.classList.add("is-ready");
+  }, FORCE_MS);
+
   if (!intro) {
+    window.clearTimeout(forceTimer);
     document.body.classList.remove("is-loading");
     document.body.classList.add("is-ready");
     return;
@@ -195,176 +283,121 @@ function runIntroThenReveal() {
 
   window.setTimeout(() => {
     intro.classList.add("is-out");
-
     window.setTimeout(() => {
+      window.clearTimeout(forceTimer);
       document.body.classList.remove("is-loading");
       document.body.classList.add("is-ready");
     }, OUT_MS);
   }, LINE_MS);
 }
 
+function closeNav() {
+  isNavOpen.value = false;
+  document.body.classList.remove("nav-open");
+}
+function openNav() {
+  isNavOpen.value = true;
+  document.body.classList.add("nav-open");
+}
+function toggleNav() {
+  isNavOpen.value ? closeNav() : openNav();
+}
+
 function openPageFromCover() {
-  const cover = document.querySelector(".cover") as HTMLElement | null;
+  const cover = coverEl.value;
   if (!cover) return;
 
+  // ✅ 「閉じる」= page-open に戻す（CSS設計通り）
   document.body.classList.add("page-open");
+  document.body.classList.remove("is-loading");
+  document.body.classList.add("is-ready");
 
+  // cover フェードアウト
   cover.style.transition = "opacity .6s cubic-bezier(.22,.61,.36,1)";
   cover.style.opacity = "0";
 
   window.setTimeout(() => {
-    cover.style.display = "none";
+    showIntroCover.value = false; // DOMを消す
     window.scrollTo({ top: 0, left: 0, behavior: "instant" as any });
-    setupPageInteractions();
   }, 600);
 }
 
-function setIllus(variant: string) {
-  const map: Record<string, string> = {
-    "00": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.35'/%3E%3Cpath d='M120 520 L1080 520' stroke='%23a24d44' stroke-opacity='.18' stroke-width='12'/%3E%3C/svg%3E",
-    "01": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Cpath d='M0 520 C 220 430, 360 610, 620 520 C 880 430, 980 590, 1200 520' fill='none' stroke='%23a24d44' stroke-opacity='.35' stroke-width='18'/%3E%3C/svg%3E",
-    "02": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Ccircle cx='380' cy='320' r='220' fill='%23a24d44' fill-opacity='.14'/%3E%3Ccircle cx='780' cy='420' r='260' fill='%23a24d44' fill-opacity='.10'/%3E%3C/svg%3E",
-    "03": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.25'/%3E%3Cpath d='M120 560 L1080 560' stroke='%23a24d44' stroke-opacity='.22' stroke-width='14'/%3E%3Cpath d='M220 470 L980 470' stroke='%23a24d44' stroke-opacity='.18' stroke-width='10'/%3E%3Cpath d='M340 390 L860 390' stroke='%23a24d44' stroke-opacity='.14' stroke-width='8'/%3E%3C/svg%3E",
-  };
+async function showCoverAndIntro() {
+  // ✅ 毎回 cover を作り直す（opacity残骸完全排除）
+  coverKey.value += 1;
 
-  const key = String(variant);
-  const uri = map[key] ? map[key] : map["00"];
-  document.documentElement.style.setProperty("--illus-url", `url("${uri}")`);
-}
+  showIntroCover.value = true;
 
-function setupPageInteractions() {
-  const burger = document.querySelector(".site-burger") as HTMLElement | null;
-  const drawer = document.querySelector(".site-drawer") as HTMLElement | null;
-  const backdrop = document.querySelector(".nav-backdrop") as HTMLElement | null;
+  // cover中は page を閉じる（= .page は非表示）
+  document.body.classList.remove("page-open");
+  document.body.classList.remove("nav-open");
+  isNavOpen.value = false;
 
-  // illus swap
-  const items = document.querySelectorAll<HTMLElement>(".hero-menu__item[data-illus]");
-  if (items.length) {
-    const base = "00";
-    setIllus(base);
+  // ✅ v-if DOM生成待ち
+  await nextTick();
 
-    items.forEach((el) => {
-      const v = el.getAttribute("data-illus") || base;
-
-      el.addEventListener("mouseenter", () => setIllus(v));
-      el.addEventListener("focus", () => setIllus(v));
-      el.addEventListener("mouseleave", () => setIllus(base));
-      el.addEventListener("blur", () => setIllus(base));
-
-      el.addEventListener("touchstart", () => setIllus(v), { passive: true });
-      el.addEventListener("touchend", () => setIllus(base), { passive: true });
-      el.addEventListener("touchcancel", () => setIllus(base), { passive: true });
-    });
+  // ✅ 念のため毎回初期化（ここが効く）
+  const cover = coverEl.value;
+  if (cover) {
+    cover.style.transition = "";
+    cover.style.opacity = "1";
   }
 
-  function openNav() {
-    document.body.classList.add("nav-open");
-    burger?.setAttribute("aria-expanded", "true");
-    drawer?.setAttribute("aria-hidden", "false");
+  const intro = introEl.value;
+  if (intro) {
+    intro.classList.remove("is-out");
   }
 
-  function closeNav() {
-    document.body.classList.remove("nav-open");
-    burger?.setAttribute("aria-expanded", "false");
-    drawer?.setAttribute("aria-hidden", "true");
-  }
-
-  function toggleNav() {
-    const isOpen = document.body.classList.contains("nav-open");
-    isOpen ? closeNav() : openNav();
-  }
-
-  if (burger && !(burger as any).__bound) {
-    (burger as any).__bound = true;
-    burger.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleNav();
-    });
-  }
-
-  if (drawer && !(drawer as any).__bound) {
-    (drawer as any).__bound = true;
-    drawer.addEventListener("click", (e) => e.stopPropagation());
-  }
-
-  if (backdrop && !(backdrop as any).__bound) {
-    (backdrop as any).__bound = true;
-    backdrop.addEventListener("click", (e) => {
-      e.preventDefault();
-      closeNav();
-    });
-  }
-
-  if (!(document as any).__escBound) {
-    (document as any).__escBound = true;
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && document.body.classList.contains("nav-open")) closeNav();
-    });
-  }
-}
-
-function hasSeenInThisTab() {
-  return (window.name || "").includes("FB_SEEN=1");
-}
-function markSeenInThisTab() {
-  const n = window.name || "";
-  if (!n.includes("FB_SEEN=1")) window.name = (n ? n + ";" : "") + "FB_SEEN=1";
-}
-function isReloadNav() {
-  const navEntry = performance.getEntriesByType("navigation")[0] as any;
-  if (navEntry && navEntry.type) return navEntry.type === "reload";
-  const p: any = performance as any;
-  if (p && p.navigation) return p.navigation.type === 1;
-  return false;
+  runIntroThenReveal();
 }
 
 function showPageImmediately() {
-  const cover = document.querySelector(".cover") as HTMLElement | null;
-  const page = document.querySelector(".page") as HTMLElement | null;
-  const intro = document.querySelector(".intro") as HTMLElement | null;
+  showIntroCover.value = false;
 
   document.body.classList.add("page-open");
-  document.body.classList.remove("nav-open");
   document.body.classList.remove("is-loading");
   document.body.classList.add("is-ready");
-
-  if (intro) intro.style.display = "none";
-  if (cover) {
-    cover.style.display = "none";
-    cover.style.opacity = "0";
-    cover.style.pointerEvents = "none";
-  }
-  if (page) {
-    page.style.visibility = "visible";
-    page.style.opacity = "1";
-    page.style.transform = "none";
-  }
-  setupPageInteractions();
+  closeNav();
 }
 
-onMounted(() => {
-  // cover-close
-  document.addEventListener("click", (e) => {
-    const t = e.target as HTMLElement;
-    const btn = t.closest(".cover-close");
-    if (!btn) return;
-    markSeenInThisTab();
-    openPageFromCover();
-  });
+onBeforeRouteLeave(() => {
+  // ✅ Homeから出る時は必ず page-open を付けて「白画面」を潰す
+  document.body.classList.add("page-open");
+  document.body.classList.remove("is-loading");
+  document.body.classList.add("is-ready");
+  closeNav();
 
+  // cover出しっぱなし遷移でも残骸を消す
+  showIntroCover.value = false;
+});
+
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === "Escape" && isNavOpen.value) closeNav();
+}
+
+onMounted(async () => {
+  // 最低限の掃除
+  document.body.classList.remove("is-loading");
+  closeNav();
+
+  // ✅ 要件：リロード時は必ず intro+cover
   const reload = isReloadNav();
-  const seen = hasSeenInThisTab();
-  markSeenInThisTab();
 
-  if (reload) {
-    runIntroThenReveal();
+  // ✅ SPA遷移ではこのタブ初回だけ
+  const shouldShow = reload || !HOME_SEEN_IN_THIS_TAB;
+  HOME_SEEN_IN_THIS_TAB = true;
+
+  window.addEventListener("keydown", onKeydown);
+
+  if (shouldShow) {
+    await showCoverAndIntro();
     return;
   }
-  if (seen) {
-    showPageImmediately();
-    return;
-  }
-  runIntroThenReveal();
+
+  showPageImmediately();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", onKeydown);
 });
 </script>
