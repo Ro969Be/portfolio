@@ -1,38 +1,13 @@
 <template>
   <div class="page works-page">
-    <header class="site-header" role="banner">
-      <div class="site-header__inner">
-        <RouterLink class="site-brand" to="/" aria-label="Morii's Portfolio">
-          <span class="site-brand__mark" aria-hidden="true">◎</span>
-          <span class="site-brand__text">Morii's Portfolio</span>
-        </RouterLink>
-
-        <nav class="site-nav" aria-label="Global navigation">
-          <RouterLink class="site-nav__link" to="/works">実績</RouterLink>
-          <RouterLink class="site-nav__link" to="/contact">お問い合わせ</RouterLink>
-          <span class="site-nav__sep">|</span>
-          <a class="site-nav__link" href="https://github.com/Ro969Be" target="_blank" rel="noopener">GitHub</a>
-        </nav>
-
-        <button class="site-burger" type="button" aria-label="Menu" aria-expanded="false">
-          <span class="site-burger__lines" aria-hidden="true"></span>
-        </button>
-      </div>
-
-      <div class="site-drawer" aria-hidden="true">
-        <RouterLink class="site-drawer__link" to="/works">実績</RouterLink>
-        <RouterLink class="site-drawer__link" to="/contact">お問い合わせ</RouterLink>
-        <a class="site-drawer__link" href="https://github.com/Ro969Be" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </header>
-
-    <div class="nav-backdrop" aria-hidden="true"></div>
+    <AppHeader />
 
     <main class="site-main" role="main">
-      <h1>
+      <h1 class="works-title">
         実績一覧
         <span>Works</span>
       </h1>
+
       <section class="works-cards" aria-label="works tiles">
         <a
           v-for="(w, idx) in works"
@@ -70,13 +45,8 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, reactive } from "vue";
 import { works } from "../data/works";
+import AppHeader from "../components/AppHeader.vue";
 
-/**
- * 重要:
- * - グローバルCSSで .page は body.page-open が無いと非表示
- * - /works 直アクセス or リロード or cover→works 遷移でも白画面にならないよう
- *   このページ側で body.page-open を必ず付与する
- */
 function ensurePageVisible() {
   document.body.classList.add("page-open");
   document.body.classList.add("is-ready");
@@ -87,36 +57,69 @@ function ensurePageVisible() {
 function enableWorksScroll() {
   document.body.classList.add("is-works-scroll");
 
-  // html 強制解除
   document.documentElement.style.overflowY = "auto";
   document.documentElement.style.overflowX = "hidden";
 
-  // body 強制解除
   document.body.style.overflowY = "auto";
   document.body.style.overflowX = "hidden";
 
-  // page container（このページだけスクロール）
   const page = document.querySelector(".page") as HTMLElement | null;
   if (page) {
     page.style.overflow = "auto";
-    page.style.webkitOverflowScrolling = "touch";
+    (page.style as any).webkitOverflowScrolling = "touch";
   }
 }
 
 function disableWorksScroll() {
   document.body.classList.remove("is-works-scroll");
 
-  // CSS制御へ戻す
   document.documentElement.style.overflowY = "";
   document.documentElement.style.overflowX = "";
+
   document.body.style.overflowY = "";
   document.body.style.overflowX = "";
 
   const page = document.querySelector(".page") as HTMLElement | null;
   if (page) {
     page.style.overflow = "";
-    page.style.webkitOverflowScrolling = "";
+    (page.style as any).webkitOverflowScrolling = "";
   }
+}
+
+/* ===== works: scroll restore + header/parallax ===== */
+function bindPageScrollUX() {
+  const page = document.querySelector(".page") as HTMLElement | null;
+  if (!page) return () => {};
+
+  const KEY = "scroll:/works";
+  const saved = sessionStorage.getItem(KEY);
+  if (saved) page.scrollTop = Number(saved);
+
+  let raf = 0;
+  const onScroll = () => {
+    if (raf) return;
+    raf = window.requestAnimationFrame(() => {
+      raf = 0;
+      const y = page.scrollTop || 0;
+
+      sessionStorage.setItem(KEY, String(y));
+
+      if (y > 8) document.body.classList.add("is-scrolled");
+      else document.body.classList.remove("is-scrolled");
+
+      const p = Math.min(y * 0.08, 24);
+      document.documentElement.style.setProperty("--hero-parallax", `${p}px`);
+    });
+  };
+
+  onScroll();
+  page.addEventListener("scroll", onScroll, { passive: true });
+
+  return () => {
+    page.removeEventListener("scroll", onScroll as any);
+    document.body.classList.remove("is-scrolled");
+    document.documentElement.style.setProperty("--hero-parallax", "0px");
+  };
 }
 
 const thumbs = reactive<Record<string, string | null>>({});
@@ -132,84 +135,31 @@ async function fetchOg(url: string): Promise<string | null> {
   }
 }
 
-function setupNavInteractions() {
-  const burger = document.querySelector(".site-burger") as HTMLElement | null;
-  const drawer = document.querySelector(".site-drawer") as HTMLElement | null;
-  const backdrop = document.querySelector(".nav-backdrop") as HTMLElement | null;
-
-  function openNav() {
-    document.body.classList.add("nav-open");
-    burger?.setAttribute("aria-expanded", "true");
-    drawer?.setAttribute("aria-hidden", "false");
-  }
-  function closeNav() {
-    document.body.classList.remove("nav-open");
-    burger?.setAttribute("aria-expanded", "false");
-    drawer?.setAttribute("aria-hidden", "true");
-  }
-  function toggleNav() {
-    const isOpen = document.body.classList.contains("nav-open");
-    isOpen ? closeNav() : openNav();
-  }
-
-  if (burger && !(burger as any).__bound) {
-    (burger as any).__bound = true;
-    burger.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleNav();
-    });
-  }
-
-  if (drawer && !(drawer as any).__bound) {
-    (drawer as any).__bound = true;
-    drawer.addEventListener("click", (e) => e.stopPropagation());
-  }
-
-  if (backdrop && !(backdrop as any).__bound) {
-    (backdrop as any).__bound = true;
-    backdrop.addEventListener("click", (e) => {
-      e.preventDefault();
-      closeNav();
-    });
-  }
-
-  if (!(document as any).__escBound) {
-    (document as any).__escBound = true;
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && document.body.classList.contains("nav-open")) closeNav();
-    });
-  }
-}
+let unbindUX: null | (() => void) = null;
 
 onMounted(async () => {
-  // ✅ 白画面対策（/works直アクセス・リロード・遷移すべて）
   ensurePageVisible();
-
-  // ✅ Worksだけ常時スクロール（既存仕様を維持）
   enableWorksScroll();
 
-  // ✅ Nav
-  setupNavInteractions();
+  unbindUX = bindPageScrollUX();
 
-  // ✅ OG画像を順に取得（軽く逐次）
   for (const w of works) {
     thumbs[w.id] = await fetchOg(w.url);
   }
 });
 
 onBeforeUnmount(() => {
+  unbindUX?.();
   disableWorksScroll();
 });
 </script>
 
 <style scoped>
-h1 {
+.works-title {
   text-align: center;
-  /* margin: 0 0 26px; */
 }
 
-h1 span::before {
+.works-title span::before {
   content: "\A";
   white-space: pre;
 }
@@ -219,7 +169,6 @@ h1 span::before {
   margin: 18px auto 0;
   display: grid;
   gap: 18px;
-
   grid-template-columns: 1fr;
 }
 

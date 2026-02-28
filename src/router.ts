@@ -12,7 +12,6 @@ export const router = createRouter({
     { path: "/works", name: "works", component: WorksView },
     { path: "/contact", name: "contact", component: ContactView },
 
-    // “見た目は同じ”で、遷移先だけ置換（旧リンク互換）
     { path: "/newsletter", redirect: "/works" },
     { path: "/company", redirect: "/works" },
 
@@ -20,4 +19,12 @@ export const router = createRouter({
 
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
+
+  scrollBehavior(to, from, savedPosition) {
+    // ブラウザ戻る/進む
+    if (savedPosition) return savedPosition;
+
+    // 基本は先頭
+    return { left: 0, top: 0 };
+  },
 });

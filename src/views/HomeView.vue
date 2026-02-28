@@ -7,11 +7,9 @@
   </div>
 
   <!-- ===== Fullscreen Cover ===== -->
-  <!-- ✅ keyで毎回作り直して opacity 残骸を完全排除 -->
   <div v-if="showIntroCover" :key="coverKey" ref="coverEl" class="cover" aria-label="fullscreen cover">
     <header class="cover-header">
       <div class="cover-header__inner">
-        <!-- ロゴはダミー -->
         <RouterLink class="cover-brand" to="/" aria-label="Morii's Portfolio">
           <span class="cover-brand__mark" aria-hidden="true">◎</span>
           <span class="cover-brand__text">Morii's Portfolio</span>
@@ -91,7 +89,6 @@
         </RouterLink>
       </section>
 
-      <!-- Close (bottom-left) -->
       <button class="cover-close" type="button" aria-label="Close" @click="openPageFromCover">
         <span class="cover-close__x" aria-hidden="true">×</span>
       </button>
@@ -100,40 +97,7 @@
 
   <!-- ===== After close page ===== -->
   <div class="page" aria-label="after close page">
-    <header class="site-header" role="banner">
-      <div class="site-header__inner">
-        <RouterLink class="site-brand" to="/" aria-label="Morii's Portfolio">
-          <span class="site-brand__mark" aria-hidden="true">◎</span>
-          <span class="site-brand__text">Morii's Portfolio</span>
-        </RouterLink>
-
-        <nav class="site-nav" aria-label="Global navigation">
-          <RouterLink class="site-nav__link" to="/works">実績</RouterLink>
-          <RouterLink class="site-nav__link" to="/contact">お問い合わせ</RouterLink>
-          <span class="site-nav__sep">|</span>
-          <a class="site-nav__link" href="https://github.com/Ro969Be" target="_blank" rel="noopener">GitHub</a>
-        </nav>
-
-        <button
-          ref="burgerEl"
-          class="site-burger"
-          type="button"
-          aria-label="Menu"
-          :aria-expanded="isNavOpen ? 'true' : 'false'"
-          @click.prevent.stop="toggleNav"
-        >
-          <span class="site-burger__lines" aria-hidden="true"></span>
-        </button>
-      </div>
-
-      <div ref="drawerEl" class="site-drawer" :aria-hidden="isNavOpen ? 'false' : 'true'">
-        <RouterLink class="site-drawer__link" to="/works">実績</RouterLink>
-        <RouterLink class="site-drawer__link" to="/contact">お問い合わせ</RouterLink>
-        <a class="site-drawer__link" href="https://github.com/Ro969Be" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </header>
-
-    <div class="nav-backdrop" aria-hidden="true" @click.prevent="closeNav"></div>
+    <AppHeader />
 
     <main class="site-main" role="main">
       <section class="hero-card" aria-label="hero card">
@@ -162,7 +126,8 @@
               企業内連絡ツール(チャットアプリ)、ホームページ管理アプリ、Discordの音声BOTなど。<br /><br />
               開発環境：Node.js, npm, pnpm, MongoDB, Codex, GitHub, AngularJS, Vue.js, TypeScript, Adobe Illustrator,
               Adobe Photoshop<br />e.t.c.<br /><br />
-              まずはご相談ください。
+              まずはご相談ください。<br /><br />
+              趣味：ワイン(チリのカベルネ・ソーヴィニョン、南アのシュナンブラン)、Apex Legends(最高マスター)、ボルダリング(簡単な2級程度)
             </p>
           </div>
 
@@ -206,6 +171,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onBeforeUnmount, ref } from "vue";
 import { onBeforeRouteLeave } from "vue-router";
+import AppHeader from "../components/AppHeader.vue";
 
 const showIntroCover = ref(false);
 const coverKey = ref(0);
@@ -213,11 +179,12 @@ const coverKey = ref(0);
 const coverEl = ref<HTMLElement | null>(null);
 const introEl = ref<HTMLElement | null>(null);
 
-const isNavOpen = ref(false);
-
 const SEEN_KEY = "MP_HOME_SEEN";
 const RELOAD_KEY = "MP_HOME_RELOAD_ONCE";
 const LOAD_ID_KEY = "MP_LOAD_ID";
+
+let pageBound = false;
+let detachScrollEffects: null | (() => void) = null;
 
 function isReloadNav(): boolean {
   try {
@@ -227,18 +194,6 @@ function isReloadNav(): boolean {
     if (p?.navigation) return p.navigation.type === 1;
   } catch {}
   return false;
-}
-
-function closeNav() {
-  isNavOpen.value = false;
-  document.body.classList.remove("nav-open");
-}
-function openNav() {
-  isNavOpen.value = true;
-  document.body.classList.add("nav-open");
-}
-function toggleNav() {
-  isNavOpen.value ? closeNav() : openNav();
 }
 
 function runIntroThenReveal() {
@@ -274,138 +229,8 @@ function runIntroThenReveal() {
   }, LINE_MS);
 }
 
-function setupPageInteractions() {
-  // illus swap
-  const items = document.querySelectorAll(".hero-menu__item[data-illus]");
-  if (items.length) {
-    const base = "00";
-    setIllus(base);
-
-    items.forEach((el) => {
-      const v = el.getAttribute("data-illus") || base;
-
-      el.addEventListener("mouseenter", () => setIllus(v));
-      el.addEventListener("focus", () => setIllus(v));
-
-      el.addEventListener("mouseleave", () => setIllus(base));
-      el.addEventListener("blur", () => setIllus(base));
-
-      el.addEventListener("touchstart", () => setIllus(v), { passive: true });
-      el.addEventListener("touchend", () => setIllus(base), { passive: true });
-      el.addEventListener("touchcancel", () => setIllus(base), { passive: true });
-    });
-  }
-}
-
-function openPageFromCover() {
-  const cover = coverEl.value;
-  if (!cover) return;
-
-  document.body.classList.add("page-open");
-  document.body.classList.remove("is-loading");
-  document.body.classList.add("is-ready");
-
-  cover.style.transition = "opacity .6s cubic-bezier(.22,.61,.36,1)";
-  cover.style.opacity = "0";
-
-  window.setTimeout(() => {
-    showIntroCover.value = false;
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" as any });
-    setupPageInteractions(); // ✅ホバー差し替え復活
-  }, 600);
-}
-
-async function showCoverAndIntro() {
-  coverKey.value += 1;
-
-  showIntroCover.value = true;
-
-  document.body.classList.remove("page-open");
-  closeNav();
-
-  await nextTick();
-
-  const cover = coverEl.value;
-  if (cover) {
-    cover.style.transition = "";
-    cover.style.opacity = "1";
-  }
-
-  const intro = introEl.value;
-  if (intro) {
-    intro.classList.remove("is-out");
-  }
-
-  runIntroThenReveal();
-}
-
-function showPageImmediately() {
-  showIntroCover.value = false;
-  document.body.classList.add("page-open");
-  document.body.classList.remove("is-loading");
-  document.body.classList.add("is-ready");
-  closeNav();
-
-  setupPageInteractions(); // ✅ホバー差し替え復活
-}
-
-onBeforeRouteLeave(() => {
-  document.body.classList.add("page-open");
-  document.body.classList.remove("is-loading");
-  document.body.classList.add("is-ready");
-  closeNav();
-  showIntroCover.value = false;
-});
-
-function onKeydown(e: KeyboardEvent) {
-  if (e.key === "Escape" && isNavOpen.value) closeNav();
-}
-
-onMounted(async () => {
-  document.body.classList.remove("is-loading");
-  closeNav();
-
-  window.addEventListener("keydown", onKeydown);
-
-  // ✅ “今回のロード” を識別（リロード/新規で必ず変わる）
-  const nowLoadId = String((performance as any).timeOrigin ?? Date.now());
-  const prevLoadId = sessionStorage.getItem(LOAD_ID_KEY);
-
-  // ✅ ロードが変わったら（=通常リロード含む） reload判定を作り直す
-  if (prevLoadId !== nowLoadId) {
-    sessionStorage.setItem(LOAD_ID_KEY, nowLoadId);
-    sessionStorage.setItem(RELOAD_KEY, isReloadNav() ? "1" : "0");
-  }
-
-  const seen = sessionStorage.getItem(SEEN_KEY) === "1";
-  const reloadPending = sessionStorage.getItem(RELOAD_KEY) === "1";
-
-  // ✅ 要件：
-  // - 通常のブラウザリロード時: intro+cover を出す
-  // - ページ遷移(SPA)では出さない
-  // - 新規(未seen)は出す（必要ならここは消せる）
-  const shouldShow = reloadPending || !seen;
-
-  // ✅ 以後このタブでは「新規扱い」にならない
-  sessionStorage.setItem(SEEN_KEY, "1");
-
-  // ✅ reload判定は Home で“1回だけ”消費（これで戻り/再マウントで出ない）
-  sessionStorage.setItem(RELOAD_KEY, "0");
-
-  if (shouldShow) {
-    await showCoverAndIntro();
-    return;
-  }
-
-  showPageImmediately();
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("keydown", onKeydown);
-});
-
 /* ===============================
-   PAGE: illus swap
+   illus swap
 ================================ */
 function setIllus(variant: string) {
   const map: Record<string, string> = {
@@ -427,4 +252,180 @@ function setIllus(variant: string) {
   const uri = map[key] ? map[key] : map["00"];
   document.documentElement.style.setProperty("--illus-url", `url("${uri}")`);
 }
+
+function setupPageInteractionsOnce() {
+  if (pageBound) return;
+  pageBound = true;
+
+  const items = document.querySelectorAll(".hero-menu__item[data-illus]");
+  if (!items.length) return;
+
+  const base = "00";
+  setIllus(base);
+
+  items.forEach((el) => {
+    const v = el.getAttribute("data-illus") || base;
+
+    el.addEventListener("mouseenter", () => setIllus(v));
+    el.addEventListener("focus", () => setIllus(v));
+
+    el.addEventListener("mouseleave", () => setIllus(base));
+    el.addEventListener("blur", () => setIllus(base));
+
+    el.addEventListener("touchstart", () => setIllus(v), { passive: true });
+    el.addEventListener("touchend", () => setIllus(base), { passive: true });
+    el.addEventListener("touchcancel", () => setIllus(base), { passive: true });
+  });
+}
+
+/* ===============================
+   Scroll effects (header alpha + parallax)
+================================ */
+function getScroller(): Window | HTMLElement {
+  const page = document.querySelector(".page") as HTMLElement | null;
+  if (page) {
+    const st = getComputedStyle(page);
+    if (st.overflowY === "auto" || st.overflowY === "scroll") return page;
+  }
+  return window;
+}
+
+function attachScrollEffects() {
+  const scroller = getScroller();
+  const readY = () => (scroller === window ? window.scrollY : (scroller as HTMLElement).scrollTop);
+
+  let raf = 0;
+  const onScroll = () => {
+    if (raf) return;
+    raf = window.requestAnimationFrame(() => {
+      raf = 0;
+      const y = readY();
+
+      if (y > 8) document.body.classList.add("is-scrolled");
+      else document.body.classList.remove("is-scrolled");
+
+      const p = Math.min(y * 0.08, 24);
+      document.documentElement.style.setProperty("--hero-parallax", `${p}px`);
+    });
+  };
+
+  onScroll();
+
+  if (scroller === window) {
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll as any);
+  } else {
+    (scroller as HTMLElement).addEventListener("scroll", onScroll, { passive: true });
+    return () => (scroller as HTMLElement).removeEventListener("scroll", onScroll as any);
+  }
+}
+
+/* ===============================
+   Cover open/close
+================================ */
+function startPageEffects() {
+  setupPageInteractionsOnce();
+
+  detachScrollEffects?.();
+  detachScrollEffects = attachScrollEffects();
+}
+
+function openPageFromCover() {
+  const cover = coverEl.value;
+  if (!cover) return;
+
+  document.body.classList.add("page-open");
+  document.body.classList.remove("is-loading");
+  document.body.classList.add("is-ready");
+
+  cover.style.transition = "opacity .6s cubic-bezier(.22,.61,.36,1)";
+  cover.style.opacity = "0";
+
+  window.setTimeout(() => {
+    showIntroCover.value = false;
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" as any });
+    startPageEffects();
+  }, 600);
+}
+
+async function showCoverAndIntro() {
+  coverKey.value += 1;
+  showIntroCover.value = true;
+
+  document.body.classList.remove("page-open");
+
+  await nextTick();
+
+  const cover = coverEl.value;
+  if (cover) {
+    cover.style.transition = "";
+    cover.style.opacity = "1";
+  }
+
+  const intro = introEl.value;
+  if (intro) intro.classList.remove("is-out");
+
+  runIntroThenReveal();
+}
+
+function showPageImmediately() {
+  showIntroCover.value = false;
+  document.body.classList.add("page-open");
+  document.body.classList.remove("is-loading");
+  document.body.classList.add("is-ready");
+
+  startPageEffects();
+}
+
+/* ===============================
+   Route leave
+================================ */
+onBeforeRouteLeave(() => {
+  document.body.classList.add("page-open");
+  document.body.classList.remove("is-loading");
+  document.body.classList.add("is-ready");
+  showIntroCover.value = false;
+});
+
+/* ===============================
+   Mount
+================================ */
+onMounted(async () => {
+  // 初期の保険（白画面系を潰す）
+  document.body.classList.remove("nav-open");
+  document.body.classList.remove("is-loading");
+  document.body.classList.remove("is-scrolled");
+
+  const nowLoadId = String((performance as any).timeOrigin ?? Date.now());
+  const prevLoadId = sessionStorage.getItem(LOAD_ID_KEY);
+
+  if (prevLoadId !== nowLoadId) {
+    sessionStorage.setItem(LOAD_ID_KEY, nowLoadId);
+    sessionStorage.setItem(RELOAD_KEY, isReloadNav() ? "1" : "0");
+  }
+
+  const seen = sessionStorage.getItem(SEEN_KEY) === "1";
+  const reloadPending = sessionStorage.getItem(RELOAD_KEY) === "1";
+
+  const shouldShow = reloadPending || !seen;
+
+  sessionStorage.setItem(SEEN_KEY, "1");
+  sessionStorage.setItem(RELOAD_KEY, "0");
+
+  if (shouldShow) {
+    await showCoverAndIntro();
+    return;
+  }
+
+  showPageImmediately();
+});
+
+onBeforeUnmount(() => {
+  pageBound = false;
+  detachScrollEffects?.();
+  detachScrollEffects = null;
+
+  document.body.classList.remove("is-scrolled");
+  document.documentElement.style.setProperty("--hero-parallax", "0px");
+});
 </script>

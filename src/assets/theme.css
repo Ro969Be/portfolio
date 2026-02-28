@@ -1,0 +1,132 @@
+:root {
+    /* ===== Palette (採用色) ===== */
+    --bg-main: #e9e4dc;
+    --bg-surface: #f6f3ee;
+    --text-main: #2c2c2c;
+    --accent: #a24d44;
+
+    /* ===== Derived ===== */
+    --text-sub: rgba(44, 44, 44, 0.72);
+    --text-mute: rgba(44, 44, 44, 0.56);
+    --muted: rgba(44, 44, 44, 0.68);
+    --muted2: rgba(44, 44, 44, 0.52);
+
+    --stroke: rgba(44, 44, 44, 0.10);
+    --border: rgba(44, 44, 44, 0.10);
+    --border-weak: rgba(44, 44, 44, 0.07);
+
+    /* radius（3段階固定） */
+    --r-s: 12px;
+    --r-m: 16px;
+    --r-l: 24px;
+
+    /* 上質な紙っぽい影（弱め） */
+    --shadow-sm: 0 10px 28px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 18px 42px rgba(0, 0, 0, 0.08);
+    --shadow: 0 10px 26px rgba(44, 44, 44, 0.10);
+    --shadow-hover: 0 14px 34px rgba(44, 44, 44, 0.12);
+
+    /* motion（統一） */
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+    /* Header 半透明（スクロールで変える） */
+    --header-alpha-top: 0.92;
+    --header-alpha-scrolled: 0.72;
+
+    /* Link underline animation */
+    --underline-h: 2px;
+    --underline-ease: cubic-bezier(.22, .61, .36, 1);
+
+    /* Hero parallax amount (JSが上書き) */
+    --hero-parallax: 0px;
+
+    /* ===== Cover (明るい紙トーン) ===== */
+    --cover-bg: var(--bg-main);
+    --cover-fg: rgba(44, 44, 44, 0.90);
+
+    /* “薄いグラデ + ノイズ” */
+    --cover-grad:
+        radial-gradient(900px 520px at 20% 0%, rgba(162, 77, 68, 0.10), transparent 60%),
+        radial-gradient(980px 620px at 85% 10%, rgba(44, 44, 44, 0.08), transparent 65%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(0, 0, 0, 0.03));
+
+    /* すごく薄いノイズ（SVG data URI） */
+    --noise-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+
+    /* Cards */
+    --card-bg: var(--bg-surface);
+    --card-border: var(--stroke);
+    --card-shadow: var(--shadow-sm);
+
+    /* Page */
+    --page-bg: var(--bg-main);
+    --page-panel: rgba(255, 255, 255, 0.36);
+    --page-text: rgba(44, 44, 44, 0.76);
+
+    /* Illus default */
+    --illus-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'%3E%3Crect width='1200' height='700' fill='%23ffffff' fill-opacity='.35'/%3E%3Cpath d='M120 520 L1080 520' stroke='%23a24d44' stroke-opacity='.18' stroke-width='12'/%3E%3C/svg%3E");
+}
+
+/* ===== designer-ish link underline ===== */
+a.u-link,
+.site-nav__link,
+.cover-nav__link,
+.site-drawer__link {
+    position: relative;
+}
+
+.site-nav__link::after,
+.cover-nav__link::after,
+.site-drawer__link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: var(--underline-h);
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .25s var(--underline-ease), opacity .25s var(--underline-ease);
+    opacity: .85;
+}
+
+.site-nav__link:hover::after,
+.cover-nav__link:hover::after,
+.site-drawer__link:hover::after {
+    transform: scaleX(1);
+}
+
+/* ===== Header alpha control (body class) ===== */
+.site-header {
+    background: rgba(233, 228, 220, var(--header-alpha-top));
+}
+
+body.is-scrolled .site-header {
+    background: rgba(233, 228, 220, var(--header-alpha-scrolled));
+}
+
+/* ===== Hero background parallax (micro) ===== */
+.hero-card {
+    position: relative;
+}
+
+.hero-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(900px 520px at 10% -10%, rgba(162, 77, 68, 0.10), transparent 60%),
+        radial-gradient(860px 520px at 90% 0%, rgba(44, 44, 44, 0.08), transparent 62%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(0, 0, 0, 0.02));
+    transform: translateY(var(--hero-parallax));
+    transition: transform .08s linear;
+    opacity: .95;
+    z-index: 0;
+}
+
+.hero-card__inner {
+    position: relative;
+    z-index: 1;
+}

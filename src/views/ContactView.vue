@@ -1,71 +1,78 @@
 <template>
-  <div class="panel">
-    <div class="panel-head">
-      <div class="panel-title">
-        <h1>お問い合わせ</h1>
-        <p>入力→判定→送信→完了まで、同一画面内の“状態遷移”でスムーズに見せます。</p>
+  <div class="page contact-page">
+    <AppHeader />
+
+    <main class="site-main" role="main">
+      <div class="panel" aria-label="contact panel">
+        <div class="panel-head">
+          <div class="panel-title">
+            <h1>お問い合わせ</h1>
+            <p>入力→判定→送信→完了まで、同一画面内の“状態遷移”でスムーズに見せます。</p>
+          </div>
+          <div class="kbd">Contact</div>
+        </div>
+
+        <div class="panel-body">
+          <form @submit.prevent="submit" style="display: grid; gap: 12px;">
+            <div>
+              <div class="muted" style="font-size: 12px; margin-bottom: 8px;">お名前</div>
+              <input class="input" v-model.trim="name" @blur="precheck" />
+              <div v-if="errors.name" class="err">{{ errors.name }}</div>
+            </div>
+
+            <div>
+              <div class="muted" style="font-size: 12px; margin-bottom: 8px;">メール</div>
+              <input class="input" v-model.trim="email" @blur="precheck" />
+              <div v-if="errors.email" class="err">{{ errors.email }}</div>
+            </div>
+
+            <div>
+              <div class="muted" style="font-size: 12px; margin-bottom: 8px;">内容</div>
+              <textarea class="textarea" v-model.trim="message" @blur="precheck"></textarea>
+              <div v-if="errors.message" class="err">{{ errors.message }}</div>
+              <div v-else-if="hint" :class="hintClass" style="font-size: 12px; margin-top: 8px;">{{ hint }}</div>
+            </div>
+
+            <!-- honeypot -->
+            <input v-model="honeypot" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; opacity: 0;" />
+
+            <!-- Turnstile -->
+            <div style="display: grid; gap: 8px;">
+              <div class="muted" style="font-size: 12px;">送信前チェック（Turnstile）</div>
+              <div
+                class="cf-turnstile"
+                :data-sitekey="siteKey"
+                data-theme="light"
+                data-size="flexible"
+                data-callback="onTurnstileSuccess"
+                data-expired-callback="onTurnstileExpired"
+                data-error-callback="onTurnstileError"
+              ></div>
+              <div v-if="turnstileError" class="err">{{ turnstileError }}</div>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <button class="btn primary" type="submit" :disabled="submitting || !canSubmit || !turnstileToken">
+                {{ submitting ? "Sending..." : "送信する" }}
+              </button>
+              <RouterLink class="btn" to="/">戻る</RouterLink>
+              <span class="muted" style="font-size: 12px;">{{ status }}</span>
+            </div>
+
+            <div class="muted" style="font-size: 12px; line-height: 1.7;">
+              ※ 送信時はサーバ側で Turnstile 検証・レート制限・メール送信を実施します。
+            </div>
+          </form>
+        </div>
       </div>
-      <div class="kbd">Contact</div>
-    </div>
-
-    <div class="panel-body">
-      <form @submit.prevent="submit" style="display:grid; gap:12px;">
-        <div>
-          <div class="muted" style="font-size:12px; margin-bottom:8px;">お名前</div>
-          <input class="input" v-model.trim="name" @blur="precheck" />
-          <div v-if="errors.name" class="err">{{ errors.name }}</div>
-        </div>
-
-        <div>
-          <div class="muted" style="font-size:12px; margin-bottom:8px;">メール</div>
-          <input class="input" v-model.trim="email" @blur="precheck" />
-          <div v-if="errors.email" class="err">{{ errors.email }}</div>
-        </div>
-
-        <div>
-          <div class="muted" style="font-size:12px; margin-bottom:8px;">内容</div>
-          <textarea class="textarea" v-model.trim="message" @blur="precheck"></textarea>
-          <div v-if="errors.message" class="err">{{ errors.message }}</div>
-          <div v-else-if="hint" :class="hintClass">{{ hint }}</div>
-        </div>
-
-        <!-- honeypot（簡易Bot対策） -->
-        <input v-model="honeypot" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px; opacity:0;" />
-
-        <!-- Turnstile -->
-        <div style="display:grid; gap:8px;">
-          <div class="muted" style="font-size:12px;">送信前チェック（Turnstile）</div>
-          <div
-            class="cf-turnstile"
-            :data-sitekey="siteKey"
-            data-theme="dark"
-            data-size="flexible"
-            data-callback="onTurnstileSuccess"
-            data-expired-callback="onTurnstileExpired"
-            data-error-callback="onTurnstileError"
-          ></div>
-          <div v-if="turnstileError" class="err">{{ turnstileError }}</div>
-        </div>
-
-        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-          <button class="btn primary" type="submit" :disabled="submitting || !canSubmit || !turnstileToken">
-            {{ submitting ? "Sending..." : "送信する" }}
-          </button>
-          <RouterLink class="btn" to="/">戻る</RouterLink>
-          <span class="muted" style="font-size:12px;">{{ status }}</span>
-        </div>
-
-        <div class="muted" style="font-size:12px; line-height:1.7;">
-          ※ 送信時はサーバ側で Turnstile 検証・レート制限・メール送信を実施します。
-        </div>
-      </form>
-    </div>
+    </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import AppHeader from "../components/AppHeader.vue";
 
 const router = useRouter();
 
@@ -86,7 +93,6 @@ const errors = reactive<{ name?: string; email?: string; message?: string }>({})
 const turnstileToken = ref<string>("");
 const turnstileError = ref<string>("");
 
-// Turnstile callbacks are global
 declare global {
   interface Window {
     onTurnstileSuccess?: (token: string) => void;
@@ -109,6 +115,17 @@ window.onTurnstileError = () => {
   turnstileToken.value = "";
   turnstileError.value = "認証に失敗しました。通信環境をご確認ください。";
 };
+
+function ensurePageVisible() {
+  document.body.classList.add("page-open");
+  document.body.classList.add("is-ready");
+  document.body.classList.remove("is-loading");
+  document.body.classList.remove("nav-open");
+}
+
+onMounted(() => {
+  ensurePageVisible();
+});
 
 function validateSoft() {
   errors.name = !name.value ? "お名前を入力してください" : undefined;
@@ -142,7 +159,6 @@ async function precheck() {
     status.value = "";
     validateSoft();
 
-    // 入力が薄い段階ではAPIに行かない（無駄打ち防止）
     if (!email.value || !message.value) return;
 
     try {
@@ -156,22 +172,17 @@ async function precheck() {
         })
       });
       const data = await res.json().catch(() => null);
-
       if (!res.ok || !data) return;
 
       if (data.level === "ok") {
         hint.value = data.message || "送信できます。";
         hintClass.value = "ok";
-      } else if (data.level === "warn") {
-        hint.value = data.message || "内容をもう少し具体的にすると伝わりやすいです。";
-        hintClass.value = "warn";
       } else {
-        // block は送信時に止めるが、ここでも軽く示す
-        hint.value = data.message || "";
+        hint.value = data.message || "内容をもう少し具体的にすると伝わりやすいです。";
         hintClass.value = "warn";
       }
     } catch {
-      // precheck失敗はUXを壊さない（無視）
+      // ignore
     }
   }, 350);
 }
@@ -219,7 +230,7 @@ async function submit() {
     const data = await res.json().catch(() => null);
 
     if (!res.ok) {
-      status.value = (data && data.error) ? data.error : "送信に失敗しました。";
+      status.value = data?.error ? data.error : "送信に失敗しました。";
       return;
     }
 
