@@ -1,4 +1,11 @@
 <template>
+  <!-- Intro Overlay (reload motion) -->
+  <div v-if="showIntroCover" ref="introEl" class="intro" aria-hidden="true">
+    <div class="intro__inner">
+      <div class="intro__line">今日は何をお手伝いしましょうか？</div>
+    </div>
+  </div>
+
   <!-- ===== Fullscreen Cover ===== -->
   <div v-if="showIntroCover" :key="coverKey" ref="coverEl" class="cover" aria-label="fullscreen cover">
     <header class="cover-header">
@@ -126,7 +133,6 @@
               アプリケーション開発まで
             </h1>
 
-            <!-- ★ ここはCSSの ::before が --illus-url を表示する設計 -->
             <div class="hero-illus" aria-hidden="true">
               <div class="hero-illus__box" id="heroIllus">
                 <div class="hero-illus__label">IMAGE</div>
@@ -195,7 +201,9 @@ import { ogpImage } from "../utils/og";
 
 const showIntroCover = ref(false);
 const coverKey = ref(0);
+
 const coverEl = ref<HTMLElement | null>(null);
+const introEl = ref<HTMLElement | null>(null);
 
 const SEEN_KEY = "MP_HOME_SEEN";
 const RELOAD_KEY = "MP_HOME_RELOAD_ONCE";
@@ -221,8 +229,54 @@ function initCoverThumbs() {
 }
 
 /* ===============================
+   Intro animation (reload motion)
+================================ */
+function isReloadNav(): boolean {
+  try {
+    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    if (nav?.type) return nav.type === "reload";
+    const p: any = performance as any;
+    if (p?.navigation) return p.navigation.type === 1;
+  } catch {}
+  return false;
+}
+
+function runIntroThenReveal() {
+  document.body.classList.remove("is-ready");
+  document.body.classList.add("is-loading");
+
+  const intro = introEl.value;
+
+  const FORCE_MS = 3000;
+  const forceTimer = window.setTimeout(() => {
+    if (intro) intro.classList.add("is-out");
+    document.body.classList.remove("is-loading");
+    document.body.classList.add("is-ready");
+  }, FORCE_MS);
+
+  if (!intro) {
+    window.clearTimeout(forceTimer);
+    document.body.classList.remove("is-loading");
+    document.body.classList.add("is-ready");
+    return;
+  }
+
+  const LINE_MS = 1250;
+  const OUT_MS = 550;
+
+  window.setTimeout(() => {
+    intro.classList.add("is-out");
+    window.setTimeout(() => {
+      window.clearTimeout(forceTimer);
+      document.body.classList.remove("is-loading");
+      document.body.classList.add("is-ready");
+    }, OUT_MS);
+  }, LINE_MS);
+}
+
+/* ===============================
    Hero image swap (ONE PLACE)
-   ✅ ここが本命：--illus-url を差し替える
+   ✅ --illus-url を差し替える（CSS::before が表示）
 ================================ */
 function setIllus(variant: string) {
   const map: Record<string, string> = {
@@ -235,11 +289,8 @@ function setIllus(variant: string) {
   };
 
   const url = map[String(variant)] || map["00"];
-
-  // CSS側: .hero-illus__box::before { background-image: var(--illus-url) }
   document.documentElement.style.setProperty("--illus-url", `url("${url}")`);
 
-  // ラベル非表示（あなたのCSS: .hero-illus__box.is-img .hero-illus__label { opacity:0 }）
   const el = document.getElementById("heroIllus");
   if (el) el.classList.add("is-img");
 }
@@ -274,19 +325,19 @@ function setupHeroMenuHoverOnce() {
 
 /* ===============================
    Cover open/close
-   ✅ グローバルCSSは body.page-open をトリガにしているので必須
+   ✅ CSSは body.page-open をトリガにしているので必須
 ================================ */
 function openPageFromCover() {
   const cover = coverEl.value;
   if (cover) {
     cover.style.transition = "opacity .6s cubic-bezier(.22,.61,.36,1)";
     cover.style.opacity = "0";
-    cover.style.pointerEvents = "none"; // 透明の上物がクリックを奪う事故を防ぐ
+    cover.style.pointerEvents = "none"; // 透明の上物がクリック奪う事故回避
   }
 
   document.body.classList.add("page-open");
-  document.body.classList.add("is-ready");
   document.body.classList.remove("is-loading");
+  document.body.classList.add("is-ready");
 
   window.setTimeout(() => {
     showIntroCover.value = false;
@@ -294,24 +345,11 @@ function openPageFromCover() {
   }, 600);
 }
 
-/* ===============================
-   Reload detect
-================================ */
-function isReloadNav(): boolean {
-  try {
-    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
-    if (nav?.type) return nav.type === "reload";
-    const p: any = performance as any;
-    if (p?.navigation) return p.navigation.type === 1;
-  } catch {}
-  return false;
-}
-
-async function showCover() {
+async function showCoverAndIntro() {
   coverKey.value += 1;
   showIntroCover.value = true;
 
-  // coverが出る時は page 側を閉じる（CSSが body.page-open 前提）
+  // coverを見せる時は page を閉じる
   document.body.classList.remove("page-open");
 
   await nextTick();
@@ -323,9 +361,17 @@ async function showCover() {
     cover.style.pointerEvents = "";
   }
 
-  // カバー表示中でも reveal を出すなら ready をON（あなたのCSS: body.is-ready .reveal）
-  document.body.classList.add("is-ready");
+  const intro = introEl.value;
+  if (intro) intro.classList.remove("is-out");
+
+  runIntroThenReveal();
+}
+
+function showPageImmediately() {
+  showIntroCover.value = false;
+  document.body.classList.add("page-open");
   document.body.classList.remove("is-loading");
+  document.body.classList.add("is-ready");
 }
 
 /* ===============================
@@ -334,8 +380,8 @@ async function showCover() {
 onBeforeRouteLeave(() => {
   showIntroCover.value = false;
   document.body.classList.add("page-open");
-  document.body.classList.add("is-ready");
   document.body.classList.remove("is-loading");
+  document.body.classList.add("is-ready");
 });
 
 /* ===============================
@@ -345,9 +391,10 @@ onMounted(async () => {
   initCoverThumbs();
   setupHeroMenuHoverOnce();
 
-  // 初期デフォルト画像
+  // デフォルト画像（ホバー無し）
   setIllus("00");
 
+  // cover show logic（あなたの既存ロジック）
   const nowLoadId = String((performance as any).timeOrigin ?? Date.now());
   const prevLoadId = sessionStorage.getItem(LOAD_ID_KEY);
 
@@ -364,13 +411,11 @@ onMounted(async () => {
   sessionStorage.setItem(RELOAD_KEY, "0");
 
   if (shouldShow) {
-    await showCover();
-  } else {
-    showIntroCover.value = false;
-    document.body.classList.add("page-open");
-    document.body.classList.add("is-ready");
-    document.body.classList.remove("is-loading");
+    await showCoverAndIntro();
+    return;
   }
+
+  showPageImmediately();
 });
 
 onBeforeUnmount(() => {
@@ -387,8 +432,6 @@ onBeforeUnmount(() => {
 .fb-card__illust.is-img .fb-card__illust-inner {
   opacity: 0;
 }
-
-/* label hide when image is active */
 .hero-illus__box.is-img .hero-illus__label {
   opacity: 0;
 }
