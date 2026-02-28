@@ -217,6 +217,7 @@ const isNavOpen = ref(false);
 
 const SEEN_KEY = "MP_HOME_SEEN";
 const RELOAD_KEY = "MP_HOME_RELOAD_ONCE";
+const LOAD_ID_KEY = "MP_LOAD_ID";
 
 function isReloadNav(): boolean {
   try {
@@ -366,21 +367,29 @@ onMounted(async () => {
 
   window.addEventListener("keydown", onKeydown);
 
-  const seen = sessionStorage.getItem(SEEN_KEY) === "1";
+  // ✅ “今回のロード” を識別（リロード/新規で必ず変わる）
+  const nowLoadId = String((performance as any).timeOrigin ?? Date.now());
+  const prevLoadId = sessionStorage.getItem(LOAD_ID_KEY);
 
-  // ✅ reload判定は「このページロードで1回だけ」確定させる（HMR/再マウント耐性）
-  let reloadOnce = sessionStorage.getItem(RELOAD_KEY);
-  if (reloadOnce === null) {
-    reloadOnce = isReloadNav() ? "1" : "0";
-    sessionStorage.setItem(RELOAD_KEY, reloadOnce);
+  // ✅ ロードが変わったら（=通常リロード含む） reload判定を作り直す
+  if (prevLoadId !== nowLoadId) {
+    sessionStorage.setItem(LOAD_ID_KEY, nowLoadId);
+    sessionStorage.setItem(RELOAD_KEY, isReloadNav() ? "1" : "0");
   }
 
-  const shouldShow = reloadOnce === "1" || !seen;
+  const seen = sessionStorage.getItem(SEEN_KEY) === "1";
+  const reloadPending = sessionStorage.getItem(RELOAD_KEY) === "1";
 
-  // ✅ “見た” を確定（以後このタブでは出ない）
+  // ✅ 要件：
+  // - 通常のブラウザリロード時: intro+cover を出す
+  // - ページ遷移(SPA)では出さない
+  // - 新規(未seen)は出す（必要ならここは消せる）
+  const shouldShow = reloadPending || !seen;
+
+  // ✅ 以後このタブでは「新規扱い」にならない
   sessionStorage.setItem(SEEN_KEY, "1");
 
-  // ✅ 一度 cover を出したら、その後は絶対出さない
+  // ✅ reload判定は Home で“1回だけ”消費（これで戻り/再マウントで出ない）
   sessionStorage.setItem(RELOAD_KEY, "0");
 
   if (shouldShow) {
