@@ -23,7 +23,7 @@ export const works: WorkItem[] = [
     title: "マイスターカンパニー｜Webサイト制作",
     client: "Kenroku Web",
     summary:
-      "ワイヤーフレーム設計からデザイン制作、コーディングまで一貫して対応。",
+      "ワイヤーフレーム設計からデザイン・実装まで担当し、情報構成と導線を整理したWebサイトを構築。",
     url: "https://www.meister-c.com/",
     tags: ["Webサイト制作", "フロントエンド実装"],
   },
