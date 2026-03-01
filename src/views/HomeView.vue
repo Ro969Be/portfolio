@@ -2,7 +2,7 @@
   <!-- Intro Overlay (reload motion) -->
   <div v-if="showIntroCover" ref="introEl" class="intro" aria-hidden="true">
     <div class="intro__inner">
-      <div class="intro__line">今日は何をお手伝いしましょうか？</div>
+      <div class="intro__line">あなたの目的に合わせてご案内します。</div>
     </div>
   </div>
 
@@ -18,7 +18,7 @@
     </header>
 
     <main class="cover-main">
-      <h1 class="cover-title reveal" data-delay="1">何をお求めですか？</h1>
+      <h1 class="cover-title reveal" data-delay="1">ご希望の内容をお選びください。</h1>
 
       <section class="cover-cards" aria-label="cover cards">
         <RouterLink class="fb-card reveal" data-delay="1" to="/works">
@@ -122,8 +122,8 @@
         <div class="hero-card__inner">
           <div class="hero-left">
             <h1 class="hero-title">
-              Web制作・改修から<br />
-              アプリケーション開発まで
+              WEB制作から<br />
+              アプリ開発まで対応
             </h1>
 
             <div class="hero-illus" aria-hidden="true">
@@ -135,17 +135,18 @@
 
           <div class="hero-center">
             <p class="hero-lead">
-              LP / コーポレートサイト / 会員サイトなどをデザインからコーディングまでできます。<br />
-              修正・改善もお任せください。
+              LP・コーポレートサイト・会員サイトなど、デザインから実装まで一貫して対応しています。<br />
+              既存サイトの修正・改善のみのご相談も可能です。
             </p>
 
             <p class="hero-body">
-              実績例：物件サイト、クラブサイト、LPのデザイン修正、住宅系特設ページなど。<br />
-              企業内連絡ツール(チャットアプリ)、ホームページ管理アプリ、Discordの音声BOTなど。<br /><br />
-              開発環境：Node.js, npm, pnpm, MongoDB, Codex, GitHub, AngularJS, Vue.js, TypeScript, Adobe Illustrator,
-              Adobe Photoshop<br />e.t.c.<br /><br />
-              まずはご相談ください。<br /><br />
-              趣味：ワイン(チリのカベルネ・ソーヴィニョン、南アのシュナンブラン)、Apex Legends(最高マスター)、ボルダリング(簡単な2級程度)
+              実績例：物件サイト、クラブサイト、LPデザイン改修、住宅系特設ページなど。<br />
+              社内向けチャットアプリ、Web管理アプリ、Discord音声BOTの開発経験があります。<br /><br />
+              開発環境：Node.js / Vue.js / TypeScript / MongoDB / pnpm / GitHub ほか<br />
+              Adobe Illustrator・Photoshop を使用したデザイン制作にも対応しています。<br /><br />
+              まずはお気軽にご相談ください。<br /><br />
+              趣味：ワイン（チリのカベルネ・ソーヴィニョン、南アのシュナンブラン）、<br />
+              Apex Legends（最高マスター）、ボルダリング（2級程度）
             </p>
           </div>
 

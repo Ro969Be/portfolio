@@ -4,7 +4,7 @@
 
     <main class="site-main" role="main">
       <h1 class="works-title">
-        実績一覧
+        実績・制作事例
         <span>Works</span>
       </h1>
 
@@ -18,16 +18,25 @@
           target="_blank"
           rel="noopener"
           :id="w.id"
+          :aria-label="`${w.title} を開く`"
         >
-          <div class="fb-card__num">{{ String(idx + 1).padStart(2, "0") }}</div>
+          <div class="fb-card__num">
+            {{ String(idx + 1).padStart(2, "0") }}
+          </div>
 
           <div
             class="fb-card__illust"
             aria-hidden="true"
             :class="{ 'is-img': !!thumbs[w.id] }"
-            :style="thumbs[w.id] ? { backgroundImage: `url('${thumbs[w.id]}')` } : undefined"
+            :style="
+              thumbs[w.id]
+                ? { backgroundImage: `url('${thumbs[w.id]}')` }
+                : undefined
+            "
           >
-            <div class="fb-card__illust-inner">{{ w.url.includes("github.com") ? "LINK" : "WORK" }}</div>
+            <div class="fb-card__illust-inner">
+              {{ w.url.includes("github.com") ? "LINK" : "WORK" }}
+            </div>
           </div>
 
           <div class="fb-card__head">
@@ -49,10 +58,8 @@ import AppHeader from "../components/AppHeader.vue";
 import { ogpImage } from "../utils/og";
 
 function ensurePageVisible() {
-  document.body.classList.add("page-open");
-  document.body.classList.add("is-ready");
-  document.body.classList.remove("is-loading");
-  document.body.classList.remove("nav-open");
+  document.body.classList.add("page-open", "is-ready");
+  document.body.classList.remove("is-loading", "nav-open");
 }
 
 function enableWorksScroll() {
@@ -87,7 +94,7 @@ function disableWorksScroll() {
   }
 }
 
-/* ===== works: scroll restore + header/parallax ===== */
+/* ===== scroll restore + header/parallax ===== */
 function bindPageScrollUX() {
   const page = document.querySelector(".page") as HTMLElement | null;
   if (!page) return () => {};
@@ -97,19 +104,24 @@ function bindPageScrollUX() {
   if (saved) page.scrollTop = Number(saved);
 
   let raf = 0;
+
   const onScroll = () => {
     if (raf) return;
-    raf = window.requestAnimationFrame(() => {
-      raf = 0;
-      const y = page.scrollTop || 0;
 
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+
+      const y = page.scrollTop || 0;
       sessionStorage.setItem(KEY, String(y));
 
       if (y > 8) document.body.classList.add("is-scrolled");
       else document.body.classList.remove("is-scrolled");
 
       const p = Math.min(y * 0.08, 24);
-      document.documentElement.style.setProperty("--hero-parallax", `${p}px`);
+      document.documentElement.style.setProperty(
+        "--hero-parallax",
+        `${p}px`
+      );
     });
   };
 
@@ -124,7 +136,6 @@ function bindPageScrollUX() {
 }
 
 const thumbs = reactive<Record<string, string | null>>({});
-
 let unbindUX: null | (() => void) = null;
 
 onMounted(() => {
@@ -133,7 +144,6 @@ onMounted(() => {
 
   unbindUX = bindPageScrollUX();
 
-  // ✅ OGP画像URLをそのままセット（/api/og が画像を返す）
   for (const w of works) {
     thumbs[w.id] = ogpImage(w.url);
   }
@@ -146,6 +156,9 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+/* ===============================
+   TITLE
+=============================== */
 .works-title {
   text-align: center;
 }
@@ -155,6 +168,9 @@ onBeforeUnmount(() => {
   white-space: pre;
 }
 
+/* ===============================
+   GRID
+=============================== */
 .works-cards {
   width: min(1240px, calc(100% - 88px));
   margin: 18px auto 0;
@@ -163,15 +179,55 @@ onBeforeUnmount(() => {
   grid-template-columns: 1fr;
 }
 
+/* ===============================
+   THUMB IMAGE
+=============================== */
 .fb-card__illust.is-img {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
 }
+
 .fb-card__illust.is-img .fb-card__illust-inner {
   opacity: 0;
 }
 
+/* ===============================
+   CARD UX IMPROVEMENT ⭐
+=============================== */
+.fb-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.fb-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.fb-card:hover .fb-card__label {
+  color: #2c2c2c;
+}
+
+.fb-card__arrow {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.7;
+}
+
+.fb-card:hover .fb-card__arrow {
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+/* keyboard accessibility */
+.fb-card:focus-visible {
+  outline: 2px solid rgba(162, 77, 68, 0.35);
+  outline-offset: 4px;
+}
+
+/* ===============================
+   DESKTOP
+=============================== */
 @media (min-width: 980px) {
   .works-cards {
     grid-template-columns: repeat(3, 1fr);
@@ -206,11 +262,13 @@ onBeforeUnmount(() => {
   }
 }
 
+/* ===============================
+   TABLET / MOBILE
+=============================== */
 @media (max-width: 768px) {
   .works-cards {
     width: min(760px, calc(100% - 48px));
     gap: 16px;
-    grid-template-columns: 1fr;
   }
 }
 
@@ -218,7 +276,6 @@ onBeforeUnmount(() => {
   .works-cards {
     width: calc(100% - 24px);
     gap: 14px;
-    grid-template-columns: 1fr;
   }
 }
 </style>
