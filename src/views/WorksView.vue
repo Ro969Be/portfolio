@@ -179,6 +179,30 @@ onBeforeUnmount(() => {
   grid-template-columns: 1fr;
 }
 
+.works-cards :deep(.fb-card) {
+  padding: 22px 20px 20px;
+  min-height: 260px; /* ← ここが重要 */
+  display: flex;
+  flex-direction: column;
+}
+
+/* サムネを少し高く */
+.works-cards :deep(.fb-card__illust) {
+  height: 140px;
+  margin-bottom: 16px;
+}
+
+/* タイトル下余白 */
+.works-cards :deep(.fb-card__head) {
+  margin-bottom: 8px;
+}
+
+/* 説明文を下へ押し出す */
+.works-cards :deep(.fb-card__desc) {
+  margin-top: auto;
+  line-height: 1.75;
+}
+
 /* ===============================
    THUMB IMAGE
 =============================== */
