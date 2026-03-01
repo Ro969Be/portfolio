@@ -19,12 +19,13 @@ export const works: WorkItem[] = [
     tags: ["LP", "フロント実装", "導線改善"],
   },
   {
-    id: "parktown-kiyose63",
+    id: "meister-c",
     title: "マイスターカンパニー｜Webサイト制作",
     client: "Kenroku Web",
-    summary: "ワイヤーフレーム設計からUI制作、コーディングまで一貫対応。",
+    summary:
+      "ワイヤーフレーム設計からデザイン制作、コーディングまで一貫して対応。",
     url: "https://www.meister-c.com/",
-    tags: ["Webサイト制作", "フロント実装"],
+    tags: ["Webサイト制作", "フロントエンド実装"],
   },
   {
     id: "tokyo-orc-member",
