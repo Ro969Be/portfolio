@@ -1,0 +1,20 @@
+{
+  "name": "Morii's Portfolio",
+  "short_name": "Portfolio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e9e4dc",
+  "theme_color": "#e9e4dc",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ]
+}
