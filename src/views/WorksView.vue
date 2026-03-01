@@ -28,11 +28,7 @@
             class="fb-card__illust"
             aria-hidden="true"
             :class="{ 'is-img': !!thumbs[w.id] }"
-            :style="
-              thumbs[w.id]
-                ? { backgroundImage: `url('${thumbs[w.id]}')` }
-                : undefined
-            "
+            :style="thumbs[w.id] ? { backgroundImage: `url('${thumbs[w.id]}')` } : undefined"
           >
             <div class="fb-card__illust-inner">
               {{ w.url.includes("github.com") ? "LINK" : "WORK" }}
@@ -118,10 +114,7 @@ function bindPageScrollUX() {
       else document.body.classList.remove("is-scrolled");
 
       const p = Math.min(y * 0.08, 24);
-      document.documentElement.style.setProperty(
-        "--hero-parallax",
-        `${p}px`
-      );
+      document.documentElement.style.setProperty("--hero-parallax", `${p}px`);
     });
   };
 
@@ -179,17 +172,13 @@ onBeforeUnmount(() => {
   grid-template-columns: 1fr;
 }
 
+/* ===============================
+   CARD BASE
+=============================== */
 .works-cards :deep(.fb-card) {
-  padding: 22px 20px 20px;
-  min-height: 260px; /* ← ここが重要 */
+  padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-}
-
-/* サムネを少し高く */
-.works-cards :deep(.fb-card__illust) {
-  height: 140px;
-  margin-bottom: 16px;
 }
 
 /* タイトル下余白 */
@@ -197,9 +186,9 @@ onBeforeUnmount(() => {
   margin-bottom: 8px;
 }
 
-/* 説明文を下へ押し出す */
+/* 説明文 */
 .works-cards :deep(.fb-card__desc) {
-  margin-top: auto;
+  margin-top: 10px;
   line-height: 1.75;
 }
 
@@ -250,7 +239,63 @@ onBeforeUnmount(() => {
 }
 
 /* ===============================
-   DESKTOP
+   <= 768px
+   - カード高さ 180px
+   - 画像は非表示
+=============================== */
+@media (max-width: 768px) {
+  .works-cards {
+    width: min(760px, calc(100% - 48px));
+    gap: 16px;
+  }
+
+  .works-cards :deep(.fb-card) {
+    min-height: 180px; /* ← 指定 */
+  }
+
+  .works-cards :deep(.fb-card__illust) {
+    display: none; /* ← 指定 */
+  }
+}
+
+@media (max-width: 425px) {
+  .works-cards {
+    width: calc(100% - 24px);
+    gap: 14px;
+  }
+}
+
+/* ===============================
+   769px - 979px
+   - 2列
+   - 画像表示
+   - 高さは詰め気味（必要なら調整可）
+=============================== */
+@media (min-width: 769px) and (max-width: 979px) {
+  .works-cards {
+    width: min(1100px, calc(100% - 72px));
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .works-cards :deep(.fb-card) {
+    min-height: 320px;
+    border-radius: 16px;
+  }
+
+  .works-cards :deep(.fb-card__illust) {
+    display: block;
+    height: 150px;
+    margin-bottom: 14px;
+    border-radius: 12px;
+  }
+}
+
+/* ===============================
+   >= 980px
+   - 3列
+   - カード高さ 400px
+   - 画像高さ 170px
 =============================== */
 @media (min-width: 980px) {
   .works-cards {
@@ -260,13 +305,15 @@ onBeforeUnmount(() => {
   }
 
   .works-cards :deep(.fb-card) {
-    padding: 18px 18px 14px;
+    min-height: 400px; /* ← 指定 */
+    padding: 22px 20px 20px;
     border-radius: 16px;
   }
 
   .works-cards :deep(.fb-card__illust) {
-    height: 120px;
-    margin-bottom: 14px;
+    display: block;
+    height: 170px; /* ← 指定 */
+    margin-bottom: 16px;
     border-radius: 12px;
   }
 
@@ -286,20 +333,20 @@ onBeforeUnmount(() => {
   }
 }
 
-/* ===============================
-   TABLET / MOBILE
-=============================== */
-@media (max-width: 768px) {
-  .works-cards {
-    width: min(760px, calc(100% - 48px));
-    gap: 16px;
+@media (max-width: 1012px) and (min-width: 769px) {
+  .works-cards :deep(.fb-card__illust) {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    align-self: stretch;
   }
-}
 
-@media (max-width: 425px) {
-  .works-cards {
-    width: calc(100% - 24px);
-    gap: 14px;
+  .works-cards :deep(.fb-card__illust-inner) {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    border-radius: inherit;
   }
 }
 </style>
