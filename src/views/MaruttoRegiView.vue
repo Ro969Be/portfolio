@@ -21,7 +21,13 @@
         </p>
         <div class="mr-cta">
           <a class="mr-btn mr-btn--primary" href="#pricing">無料で今すぐ始める</a>
-          <a class="mr-btn mr-btn--ghost" href="#contact">デモを見る</a>
+          <a
+            class="mr-btn mr-btn--ghost"
+            href="https://pos-regi-system-web.vercel.app/"
+            target="_blank"
+            rel="noopener"
+            >デモを見る</a
+          >
         </div>
         <p class="mr-cta__note">
           クレジットカード不要・永久無料プランあり・いつでも解約可能
