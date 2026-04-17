@@ -3,6 +3,7 @@ import HomeView from "./views/HomeView.vue";
 import WorksView from "./views/WorksView.vue";
 import ContactView from "./views/ContactView.vue";
 import DoneView from "./views/DoneView.vue";
+import MaruttoRegiView from "./views/MaruttoRegiView.vue";
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -16,6 +17,9 @@ export const router = createRouter({
     { path: "/company", redirect: "/works" },
 
     { path: "/done", name: "done", component: DoneView },
+
+    // BP-0004 まるっとレジ 商品 LP(Stripe 審査用)
+    { path: "/marutto-regi", name: "marutto-regi", component: MaruttoRegiView },
 
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
