@@ -1,0 +1,22 @@
+# Cloudflare Pages 向けキャッシュ制御.
+#
+# 問題: ハッシュ付きアセット名(index-XYZ123.js)を使う SPA で、
+#       古い index.html をキャッシュしたブラウザが古い(もう存在しない)
+#       アセットを要求 → _redirects の SPA フォールバックで HTML が返る
+#       → "MIME type text/html" エラーでサイトが起動しない.
+#
+# 対策:
+#   - index.html はキャッシュしない(常に最新を取得)
+#   - ハッシュ付きアセットは長期キャッシュ OK(ファイル名で変更検知)
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/manifest.webmanifest
+  Cache-Control: public, max-age=3600
