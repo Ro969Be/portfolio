@@ -9,28 +9,129 @@
         </div>
         <p class="mr-tagline">飲食店向けクラウド POS レジ SaaS</p>
         <h1 class="mr-title">
-          ネットが落ちても、<br />
-          注文は止まらない。
+          レジは、<span class="mr-title__accent">¥0。</span><br />
+          AI で売上を伸ばすなら、<br class="mr-br-mobile" />
+          はじめて課金。
         </h1>
         <p class="mr-lead">
-          満席の金曜、ディナータイムに WiFi が落ちた——<br />
-          その日のために作られた、次世代のクラウドレジ。<br />
-          店内ハブが、すべての端末をつなぎ続けます。
+          会計・予約・KDS・インボイス対応まで、<br />
+          飲食店の基本機能はすべて<strong>永久無料</strong>で使えます。<br />
+          AI が発注・仕入・月次レポートを手伝ってほしくなったら、<br />
+          <strong>月 ¥1,980</strong> からアップグレード。
         </p>
         <div class="mr-cta">
-          <a class="mr-btn mr-btn--primary" href="#pricing">料金プランを見る</a>
-          <a class="mr-btn mr-btn--ghost" href="#contact">お問い合わせ</a>
+          <a class="mr-btn mr-btn--primary" href="#pricing">無料で今すぐ始める</a>
+          <a class="mr-btn mr-btn--ghost" href="#contact">デモを見る</a>
         </div>
         <p class="mr-cta__note">
-          30 日間無料トライアル中・いつでも解約可能・違約金なし
+          クレジットカード不要・永久無料プランあり・いつでも解約可能
         </p>
       </div>
     </header>
 
+    <!-- Free plan callout -->
+    <section class="mr-section mr-bg-light">
+      <div class="mr-container">
+        <h2 class="mr-section__title">永久無料で、全部入り。</h2>
+        <p class="mr-section__sub">
+          他社が有料プランに閉じ込めている機能の多くを、無料プランで解放しています。
+        </p>
+
+        <div class="mr-free-grid">
+          <div class="mr-free-card">
+            <span class="mr-free-card__ic" aria-hidden="true">💳</span>
+            <div class="mr-free-card__title">会計・注文管理</div>
+            <p class="mr-free-card__desc">件数無制限。伝票・割引・領収書 PDF まで完全対応。</p>
+          </div>
+          <div class="mr-free-card">
+            <span class="mr-free-card__ic" aria-hidden="true">📅</span>
+            <div class="mr-free-card__title">予約管理</div>
+            <p class="mr-free-card__desc">テーブルレイアウト、カレンダー、タイムライン、全て無料。</p>
+          </div>
+          <div class="mr-free-card">
+            <span class="mr-free-card__ic" aria-hidden="true">👨‍🍳</span>
+            <div class="mr-free-card__title">KDS(厨房伝達)</div>
+            <p class="mr-free-card__desc">ハンディで取った注文が、キッチンへ自動で届きます。</p>
+          </div>
+          <div class="mr-free-card">
+            <span class="mr-free-card__ic" aria-hidden="true">🧾</span>
+            <div class="mr-free-card__title">インボイス対応</div>
+            <p class="mr-free-card__desc">登録番号表示・軽減税率(8/10%)区分・支払内訳を標準装備。</p>
+          </div>
+          <div class="mr-free-card">
+            <span class="mr-free-card__ic" aria-hidden="true">📊</span>
+            <div class="mr-free-card__title">売上レポート</div>
+            <p class="mr-free-card__desc">日次・月次の売上集計、客単価、時間帯別分析。</p>
+          </div>
+          <div class="mr-free-card">
+            <span class="mr-free-card__ic" aria-hidden="true">🔗</span>
+            <div class="mr-free-card__title">予約サイト連携(1 社)</div>
+            <p class="mr-free-card__desc">食べログ or ぐるなび or ホットペッパー、1 社まで無料。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI differentiator -->
+    <section class="mr-section">
+      <div class="mr-container">
+        <h2 class="mr-section__title">
+          <span class="mr-section__emoji">✨</span>
+          AI で、売上を伸ばす。月 ¥1,980 から。
+        </h2>
+        <p class="mr-section__sub">
+          無料プランで十分な店舗運営ができます。<br />
+          それでもなお、"あと一歩"を踏み込みたいときに、AI があなたの右腕になります。
+        </p>
+
+        <div class="mr-ai-grid">
+          <article class="mr-ai-card">
+            <span class="mr-ai-card__ic" aria-hidden="true">📷</span>
+            <h3 class="mr-ai-card__title">AI レシート OCR</h3>
+            <p class="mr-ai-card__desc">
+              仕入れレシートを iPad で撮るだけ。<br />
+              日付・金額・品目を自動抽出して、<strong>会計ソフトへ自動連携</strong>。
+            </p>
+            <div class="mr-ai-card__save">⏱ 月 10〜20 時間の事務作業を削減</div>
+          </article>
+
+          <article class="mr-ai-card">
+            <span class="mr-ai-card__ic" aria-hidden="true">📈</span>
+            <h3 class="mr-ai-card__title">AI 発注予測</h3>
+            <p class="mr-ai-card__desc">
+              過去実績 × 天候 × 曜日から、<br />
+              <strong>「明日、豚バラが 1.3 倍売れます」</strong>とアラート。
+            </p>
+            <div class="mr-ai-card__save">💰 食材廃棄 15% 削減、欠品回避</div>
+          </article>
+
+          <article class="mr-ai-card">
+            <span class="mr-ai-card__ic" aria-hidden="true">🧾</span>
+            <h3 class="mr-ai-card__title">AI 月次レポート</h3>
+            <p class="mr-ai-card__desc">
+              月末、税理士に渡す資料を <strong>1 クリックで生成</strong>。<br />
+              売上 / 客単価 / 時間帯別 / 客層動向を要約。
+            </p>
+            <div class="mr-ai-card__save">⏱ 月末作業 3 時間 → 10 分</div>
+          </article>
+
+          <article class="mr-ai-card">
+            <span class="mr-ai-card__ic" aria-hidden="true">💬</span>
+            <h3 class="mr-ai-card__title">AI 予約返信テンプレ</h3>
+            <p class="mr-ai-card__desc">
+              食べログ・ぐるなび予約への返信を、<br />
+              お客様の<strong>過去来店履歴を加味した下書き</strong>を自動生成。
+            </p>
+            <div class="mr-ai-card__save">⏱ 1 件 3 分 → 30 秒</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- Benefits -->
     <section class="mr-section mr-bg-light">
       <div class="mr-container">
-        <h2 class="mr-section__title">まるっとレジ が選ばれる 4 つの理由</h2>
+        <h2 class="mr-section__title">選ばれる理由</h2>
 
         <div class="mr-benefits">
           <article class="mr-benefit">
@@ -40,6 +141,7 @@
               他社 POS は「端末 1 台のオフライン会計」まで。<br />
               まるっとレジは<strong>店内ハブを介して全端末が繋がり続ける</strong>ので、
               クラウド断絶時もハンディ→KDS→レジの連携が止まりません。
+              <span class="mr-benefit__tier">AI Pro プラン以上</span>
             </p>
           </article>
 
@@ -49,6 +151,7 @@
             <p class="mr-benefit__desc">
               食べログ・ぐるなび・ホットペッパー・Retty の予約を<strong>別料金なしで統合</strong>。
               新着予約、食事制限、席移動まで串刺し管理。
+              <span class="mr-benefit__tier">AI Lite プラン以上</span>
             </p>
           </article>
 
@@ -59,16 +162,18 @@
               レシート・領収書・会計エクスポートすべてで
               <strong>登録番号表示・8%/10% 区分・支払内訳</strong>を標準対応。
               税理士が喜ぶフォーマットで月末が楽になります。
+              <span class="mr-benefit__tier">無料プランから利用可</span>
             </p>
           </article>
 
           <article class="mr-benefit">
             <div class="mr-benefit__num">04</div>
-            <h3 class="mr-benefit__title">AI がバックオフィスを引き受けます</h3>
+            <h3 class="mr-benefit__title">いつでも解約・データも持ち出し可</h3>
             <p class="mr-benefit__desc">
-              📷 レシート OCR(仕入管理)、📊 明日の発注量 AI 提案、
-              🧾 月次レポート要約、💬 予約返信テンプレ AI 生成。
-              <strong>Standard プランから追加料金なし</strong>。
+              違約金なし、いつでも解約できます。<br />
+              登録した商品マスタ・顧客データは<strong>CSV で持ち出し可能</strong>、
+              ロックインを作らない設計。
+              <span class="mr-benefit__tier">全プラン共通</span>
             </p>
           </article>
         </div>
@@ -79,60 +184,75 @@
     <section id="pricing" class="mr-section">
       <div class="mr-container">
         <h2 class="mr-section__title">料金プラン</h2>
-        <p class="mr-section__sub">すべてのプランで 30 日間無料トライアル付き</p>
+        <p class="mr-section__sub">
+          基本機能は<strong>永久無料</strong>。AI が必要になったら月 ¥1,980 から。
+        </p>
 
         <div class="mr-plans">
-          <article class="mr-plan">
+          <article class="mr-plan mr-plan--free">
+            <div class="mr-plan__badge mr-plan__badge--free">ずっと ¥0</div>
             <div class="mr-plan__name">Free</div>
             <div class="mr-plan__price">¥0<span class="mr-plan__unit">/月</span></div>
+            <div class="mr-plan__target">基本機能、全員に無料で</div>
             <ul class="mr-plan__features">
-              <li>会計月 100 件まで</li>
-              <li>POS 1 台</li>
-              <li>予約 1 サイト連携</li>
-              <li>メールサポート</li>
+              <li><strong>会計 無制限</strong></li>
+              <li><strong>予約管理 無制限</strong></li>
+              <li><strong>KDS・ハンディ対応</strong></li>
+              <li><strong>インボイス・軽減税率</strong></li>
+              <li>予約サイト 1 社連携</li>
+              <li>AI OCR 月 10 回まで</li>
+              <li>メールサポート(3 営業日)</li>
             </ul>
           </article>
 
           <article class="mr-plan">
-            <div class="mr-plan__name">Starter</div>
-            <div class="mr-plan__price">¥3,980<span class="mr-plan__unit">/月</span></div>
+            <div class="mr-plan__name">AI Lite</div>
+            <div class="mr-plan__price">¥1,980<span class="mr-plan__unit">/月</span></div>
+            <div class="mr-plan__target">AI を少し試したい</div>
             <ul class="mr-plan__features">
-              <li>会計無制限</li>
-              <li>予約 2 サイト連携</li>
-              <li>KDS 1 台</li>
-              <li>レシート OCR(AI)</li>
+              <li>Free のすべて</li>
+              <li>AI OCR 月 100 回</li>
+              <li>AI 発注提案(週次)</li>
+              <li>AI 月次レポート要約</li>
+              <li>予約サイト 4 社統合</li>
+              <li>サポート(翌営業日)</li>
             </ul>
           </article>
 
           <article class="mr-plan mr-plan--featured">
             <div class="mr-plan__badge">おすすめ</div>
-            <div class="mr-plan__name">Standard</div>
-            <div class="mr-plan__price">¥7,980<span class="mr-plan__unit">/月</span></div>
+            <div class="mr-plan__name">AI Pro</div>
+            <div class="mr-plan__price">¥4,980<span class="mr-plan__unit">/月</span></div>
+            <div class="mr-plan__target">本気でデジタル化</div>
             <ul class="mr-plan__features">
-              <li>Starter のすべて</li>
-              <li><strong>ハブモード(店全体オフライン継続)</strong></li>
-              <li>予約 4 サイト統合 in-box</li>
-              <li>KDS 無制限</li>
+              <li>AI Lite のすべて</li>
+              <li><strong>AI OCR 無制限</strong></li>
+              <li><strong>AI 発注提案(日次・高精度)</strong></li>
+              <li><strong>AI 予約返信テンプレ</strong></li>
+              <li><strong>ハブモード</strong>(店全体オフライン)</li>
               <li>LINE 連携</li>
-              <li>AI 発注補助・月次レポート</li>
+              <li>優先チャットサポート</li>
             </ul>
           </article>
 
           <article class="mr-plan">
-            <div class="mr-plan__name">Pro</div>
-            <div class="mr-plan__price">¥14,800<span class="mr-plan__unit">/月</span></div>
+            <div class="mr-plan__name">Business</div>
+            <div class="mr-plan__price">¥9,980<span class="mr-plan__unit">/月</span></div>
+            <div class="mr-plan__target">多店舗運営</div>
             <ul class="mr-plan__features">
-              <li>Standard のすべて</li>
+              <li>AI Pro のすべて</li>
               <li>多店舗管理(〜5 店)</li>
               <li>AI 売上予測</li>
-              <li>優先サポート</li>
+              <li>API アクセス</li>
+              <li>専任サポート</li>
             </ul>
           </article>
         </div>
 
         <p class="mr-pricing__note">
           価格は税抜表記です。消費税は Stripe Tax により自動計算・請求されます。<br />
-          お支払いはクレジットカード(Visa / Mastercard / JCB / American Express)。
+          お支払いはクレジットカード(Visa / Mastercard / JCB / American Express)。<br />
+          <strong>Free プランはクレジットカード登録不要。</strong>いつでも有料プランへ変更可能・違約金なし。
         </p>
       </div>
     </section>
@@ -144,15 +264,35 @@
 
         <div class="mr-faq">
           <details class="mr-faq__item">
+            <summary class="mr-faq__q">本当に Free プランは永久無料ですか?何か裏はありますか?</summary>
+            <p class="mr-faq__a">
+              はい、Free プランは完全に永久無料です。会計件数の制限も、期間制限もありません。
+              私たちは「AI 機能の価値」でのみ収益を上げるビジネスモデルを選んでいます。
+              無料で基本機能を十分に使っていただき、"あと一歩"で AI が必要になったときだけ課金いただく——
+              それが他社との最大の違いです。
+            </p>
+          </details>
+          <details class="mr-faq__item">
+            <summary class="mr-faq__q">無料でこれだけ使えて、どうやって経営が成り立つのですか?</summary>
+            <p class="mr-faq__a">
+              飲食店の多くは、基本機能だけで十分運営できます。私たちはそこに無理に課金しません。
+              一方、事務作業の自動化(AI OCR)、仕入最適化(AI 発注予測)、月次レポート自動生成といった
+              <strong>"時間を買う"</strong>価値には、明確に対価をいただきます。
+              この"対価に見合う価値"に共感いただける飲食店さまが AI プランを使われ、
+              私たちも持続的に運営できる——そういう設計です。
+            </p>
+          </details>
+          <details class="mr-faq__item">
             <summary class="mr-faq__q">本当にネットが落ちても動きますか?</summary>
             <p class="mr-faq__a">
-              ハブモード(Standard プラン以上)をご契約時は、店内ハブが稼働する限り全端末で会計・予約・KDS が継続します。クラウド同期は復旧時に自動で行われ、衝突は updatedAt ベースで解決します。
+              ハブモード(AI Pro プラン以上)をご契約時は、店内ハブが稼働する限り全端末で会計・予約・KDS が継続します。クラウド同期は復旧時に自動で行われ、衝突は updatedAt ベースで解決します。
+              Free・AI Lite プランでも端末ローカルでの会計継続は可能です。
             </p>
           </details>
           <details class="mr-faq__item">
             <summary class="mr-faq__q">導入にどれくらい時間がかかりますか?</summary>
             <p class="mr-faq__a">
-              Starter プランは最短 30 分で開始できます。iPad と WiFi があればその場で利用可能です。ハブモードは店内 LAN 設定が必要で、初期訪問セットアップ(オプション)もご案内できます。
+              Free プランは最短 30 分で開始できます。iPad と WiFi があればその場で利用可能、クレジットカード登録も不要です。ハブモード(AI Pro 以上)は店内 LAN 設定が必要で、初期訪問セットアップ(オプション)もご案内できます。
             </p>
           </details>
           <details class="mr-faq__item">
@@ -164,7 +304,7 @@
           <details class="mr-faq__item">
             <summary class="mr-faq__q">解約したいときは?</summary>
             <p class="mr-faq__a">
-              違約金なし、いつでも解約可能です。次回課金日の前日までに Stripe Customer Portal から解約手続きを行えば、翌月以降の請求は発生しません。
+              違約金なし、いつでも解約可能です。有料プランは次回課金日の前日までに Stripe Customer Portal から解約手続きを行えば、翌月以降の請求は発生しません。Free プランは解約不要ですが、アカウント削除も管理画面から自由に行えます。
             </p>
           </details>
           <details class="mr-faq__item">
@@ -240,7 +380,7 @@ onMounted(() => {
     document.head.appendChild(desc);
   }
   desc.content =
-    "まるっとレジは、飲食店向けのクラウド POS レジ SaaS。ハブモードでネット切断時も全端末が稼働、予約 4 サイト統合、AI によるバックオフィス自動化、月額 ¥3,980 から、30 日間無料トライアル付き。";
+    "まるっとレジは、基本機能が永久無料のクラウドレジ SaaS。会計・予約・KDS・インボイス対応まで ¥0 で使い放題。AI による仕入予測・OCR・月次レポート自動化は月 ¥1,980 から。クレジットカード登録不要。";
 
   // スクロール解放用のクラスを html / body に付与
   document.documentElement.classList.add("route-marutto-regi");
@@ -321,6 +461,18 @@ onBeforeUnmount(() => {
   line-height: 1.3;
   margin: 0 0 24px;
 }
+.mr-title__accent {
+  color: var(--mr-color-accent);
+  font-size: 1.2em;
+}
+.mr-br-mobile {
+  display: none;
+}
+@media (max-width: 640px) {
+  .mr-br-mobile {
+    display: inline;
+  }
+}
 .mr-lead {
   font-size: 17px;
   opacity: 0.95;
@@ -384,6 +536,111 @@ onBeforeUnmount(() => {
   color: var(--mr-color-text-muted);
   margin: 0 0 48px;
 }
+.mr-section__emoji {
+  font-size: 0.9em;
+  margin-right: 8px;
+}
+
+/* ---- Free grid ---- */
+.mr-free-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+.mr-free-card {
+  background: #fff;
+  border: 1px solid var(--mr-color-border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.15s;
+}
+.mr-free-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+}
+.mr-free-card__ic {
+  font-size: 36px;
+  display: block;
+  margin-bottom: 12px;
+}
+.mr-free-card__title {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: var(--mr-color-text);
+}
+.mr-free-card__desc {
+  font-size: 14px;
+  color: var(--mr-color-text-muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ---- AI grid ---- */
+.mr-ai-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+.mr-ai-card {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.mr-ai-card::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, rgba(8, 145, 178, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.mr-ai-card__ic {
+  font-size: 36px;
+  display: block;
+  margin-bottom: 12px;
+}
+.mr-ai-card__title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: var(--mr-color-primary-dark);
+}
+.mr-ai-card__desc {
+  font-size: 15px;
+  color: var(--mr-color-text);
+  margin: 0 0 16px;
+  line-height: 1.7;
+}
+.mr-ai-card__save {
+  display: inline-block;
+  background: rgba(8, 145, 178, 0.1);
+  color: var(--mr-color-primary-dark);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---- Benefit tier badge ---- */
+.mr-benefit__tier {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
+  padding: 3px 10px;
+  background: var(--mr-color-primary);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 600;
+}
 
 /* ---- Benefits ---- */
 .mr-benefits {
@@ -441,6 +698,10 @@ onBeforeUnmount(() => {
   transform: scale(1.04);
   box-shadow: 0 8px 24px rgba(8, 145, 178, 0.15);
 }
+.mr-plan--free {
+  border: 2px solid var(--mr-color-accent);
+  background: linear-gradient(180deg, #fef9f0 0%, #fff 60%);
+}
 .mr-plan__badge {
   position: absolute;
   top: -12px;
@@ -452,6 +713,16 @@ onBeforeUnmount(() => {
   font-weight: 700;
   padding: 4px 16px;
   border-radius: 12px;
+}
+.mr-plan__badge--free {
+  background: var(--mr-color-accent);
+  color: #0f172a;
+}
+.mr-plan__target {
+  font-size: 12px;
+  color: var(--mr-color-text-muted);
+  margin-bottom: 16px;
+  font-weight: 500;
 }
 .mr-plan__name {
   font-size: 20px;
@@ -612,8 +883,12 @@ onBeforeUnmount(() => {
 /* ---- Mobile ---- */
 @media (max-width: 900px) {
   .mr-benefits,
-  .mr-plans {
+  .mr-plans,
+  .mr-ai-grid {
     grid-template-columns: 1fr;
+  }
+  .mr-free-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
   .mr-plan--featured {
     transform: none;
@@ -632,6 +907,11 @@ onBeforeUnmount(() => {
   }
   .mr-footer__right {
     text-align: left;
+  }
+}
+@media (max-width: 640px) {
+  .mr-free-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
