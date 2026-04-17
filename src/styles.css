@@ -901,6 +901,12 @@ body.nav-open .site-burger {
     .page {
         overflow: hidden;
     }
+
+    /* /marutto-regi は LP(長文縦スクロール)のためスクロール解放 */
+    html.route-marutto-regi,
+    body.route-marutto-regi {
+        overflow: auto;
+    }
 }
 
 /* laptop(s): 769~979 */

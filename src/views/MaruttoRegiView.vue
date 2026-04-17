@@ -225,6 +225,8 @@
 import { onMounted, onBeforeUnmount } from "vue";
 
 // Stripe 審査向け: ページタイトルとメタ記述を「まるっとレジ」に上書き
+// また、このページだけは PC サイズ (>=980px) でもスクロール可にする
+// (styles.css のグローバル overflow: hidden を class で上書き)
 let prevTitle = "";
 onMounted(() => {
   prevTitle = document.title;
@@ -239,9 +241,15 @@ onMounted(() => {
   }
   desc.content =
     "まるっとレジは、飲食店向けのクラウド POS レジ SaaS。ハブモードでネット切断時も全端末が稼働、予約 4 サイト統合、AI によるバックオフィス自動化、月額 ¥3,980 から、30 日間無料トライアル付き。";
+
+  // スクロール解放用のクラスを html / body に付与
+  document.documentElement.classList.add("route-marutto-regi");
+  document.body.classList.add("route-marutto-regi");
 });
 onBeforeUnmount(() => {
   if (prevTitle) document.title = prevTitle;
+  document.documentElement.classList.remove("route-marutto-regi");
+  document.body.classList.remove("route-marutto-regi");
 });
 </script>
 
