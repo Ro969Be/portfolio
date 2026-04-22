@@ -11,6 +11,19 @@ export type WorkItem = {
 
 export const works: WorkItem[] = [
   {
+    id: "marutto-regi",
+    title: "まるっとレジ｜AI 搭載 POS システム(自社開発)",
+    client: "個人事業(森井 將裕)",
+    summary:
+      "飲食店・美容室・EC 対応の次世代 POS。AI OCR・発注提案・予約台帳・多店舗管理・Stripe 決済・LINE シナリオまで 600+ 機能を実装。Vue 3 / Node.js / MongoDB / Fly.io / OpenAI / Stripe。",
+    url: "https://pos-regi-system-web.vercel.app/lp",
+    tags: ["自社開発", "POS", "AI", "Full-stack", "Stripe", "Vue 3"],
+    notes: [
+      "LP 上部「デモアカウントで試す」ボタンでテストログイン情報を自動インストール、管理画面の全機能を実機体験いただけます。",
+      "リポジトリ: https://github.com/Ro969Be/POS-regi-system",
+    ],
+  },
+  {
     id: "parktown-kiyose63",
     title: "ParkTown 清瀬63｜物件サイト作成",
     client: "Kenroku Web",

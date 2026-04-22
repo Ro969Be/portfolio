@@ -3,7 +3,6 @@ import HomeView from "./views/HomeView.vue";
 import WorksView from "./views/WorksView.vue";
 import ContactView from "./views/ContactView.vue";
 import DoneView from "./views/DoneView.vue";
-import MaruttoRegiView from "./views/MaruttoRegiView.vue";
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -18,8 +17,8 @@ export const router = createRouter({
 
     { path: "/done", name: "done", component: DoneView },
 
-    // BP-0004 まるっとレジ 商品 LP(Stripe 審査用)
-    { path: "/marutto-regi", name: "marutto-regi", component: MaruttoRegiView },
+    // /marutto-regi(旧 LP)は POS 本体の LP へ外部遷移.ポートフォリオには置かない.
+    { path: "/marutto-regi", redirect: "/works" },
 
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
